@@ -1,18 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\eCommerce.Model\eCommerce.Model.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\eCommerce.Model\eCommerce.Model.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Mapster" Version="10.0.4-a"/>
+        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5"/>
+    </ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
 </Project>
