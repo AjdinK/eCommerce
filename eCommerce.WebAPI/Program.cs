@@ -2,6 +2,7 @@ using eCommerce.Model.Requests;
 using eCommerce.Services;
 using eCommerce.Services.Validators;
 using FluentValidation;
+using Mapster;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ builder.Services.AddScoped<IValidator<CategoriesUpdateRequest>, CategoryUpdateVa
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+builder.Services.AddMapster();
+
 
 var app = builder.Build();
 
