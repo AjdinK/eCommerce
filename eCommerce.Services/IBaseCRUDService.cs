@@ -1,13 +1,14 @@
 using eCommerce.Model.SearchObjects;
 using System.Threading.Tasks;
 
-namespace eCommerce.Services;
-
-public interface IBaseCRUDService<TResponse, TSearch, TInsertRequest, TUpdateRequest>
-    : IBaseReadService<TResponse, TSearch>
-    where TSearch : BaseSearchObject
+namespace eCommerce.Services
 {
-    Task<TResponse> InsertAsync(TInsertRequest request);
-    Task<TResponse> UpdateAsync(TUpdateRequest request);
-    Task DeleteAsync(int id);
+    public interface IBaseCRUDService<TResponse, TSearch, TInsertRequest, TUpdateRequest>
+        : IBaseReadService<TResponse, TSearch>
+        where TSearch : BaseSearchObject
+    {
+        Task<TResponse> InsertAsync(TInsertRequest request);
+        Task<TResponse> UpdateAsync(TUpdateRequest request);
+        Task DeleteAsync(int id);
+    }
 }

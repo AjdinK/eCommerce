@@ -5,6 +5,12 @@ using eCommerce.Model.Responses;
 
 namespace eCommerce.WebAPI.Controllers;
 
+/// <summary>
+/// Generic base controller for read-only operations (GetAll, GetById)
+/// </summary>
+/// <typeparam name="TResponse">The response model type</typeparam>
+/// <typeparam name="TSearch">The search/filter object type</typeparam>
+/// <typeparam name="TService">The service interface type implementing IBaseReadService</typeparam>
 [ApiController]
 [Route("[controller]")]
 public abstract class BaseReadController<TResponse, TSearch, TService> : ControllerBase

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Services.Database;
@@ -71,11 +70,17 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
         if (search != null)
         {
             if (!string.IsNullOrWhiteSpace(search.Name))
+            {
                 query = query.Where(p => p.Name.Contains(search.Name, StringComparison.OrdinalIgnoreCase));
+            }
             if (!string.IsNullOrWhiteSpace(search.Description))
-                query = query.Where(p =>
-                    p.Description.Contains(search.Description, StringComparison.OrdinalIgnoreCase));
-            if (search.ProductTypeId.HasValue) query = query.Where(p => p.ProductTypeId == search.ProductTypeId.Value);
+            {
+                query = query.Where(p => p.Description.Contains(search.Description, StringComparison.OrdinalIgnoreCase));
+            }
+            if (search.ProductTypeId.HasValue)
+            {
+                query = query.Where(p => p.ProductTypeId == search.ProductTypeId.Value);
+            }
         }
 
         return query;
@@ -83,12 +88,13 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
 
     public Task<ProductResponse> GetWithMaxNameAsync(ProductSearchObject? search = null)
     {
-        var query = GetDataSource();
+        IEnumerable<Product> query = GetDataSource();
         query = ApplyFilters(query, search);
 
         var productWithMaxName = query.OrderByDescending(p => p.Name.Length).First();
 
         var response = _mapper.Map<ProductResponse>(productWithMaxName);
         return Task.FromResult(response);
+
     }
 }

@@ -1,12 +1,12 @@
-using System.Threading.Tasks;
 using eCommerce.Model.Requests;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 
-namespace eCommerce.Services;
-
-public interface ICategoryService : IBaseCRUDService<CategoryResponse, CategorySearchObject, CategoriesInsertRequest,
-    CategoriesUpdateRequest>
+namespace eCommerce.Services
 {
-    Task<CategoryResponse> ExceptionTestingInsertAsync(CategoriesInsertRequest request);
+    public interface ICategoryService : IBaseCRUDService<CategoryResponse, CategorySearchObject, CategoriesInsertRequest, CategoriesUpdateRequest>
+    {
+        Task<CategoryResponse> ExceptionTestingInsertAsync(CategoriesInsertRequest request);
+
+    }
 }

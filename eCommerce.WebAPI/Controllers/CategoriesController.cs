@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.WebAPI.Controllers;
 
-public class CategoriesController : BaseCRUDController<CategoryResponse, CategorySearchObject, CategoriesInsertRequest,
-    CategoriesUpdateRequest, ICategoryService>
+public class CategoriesController : BaseCRUDController<CategoryResponse, CategorySearchObject, CategoriesInsertRequest, CategoriesUpdateRequest, ICategoryService>
 {
     public CategoriesController(ICategoryService categoryService) : base(categoryService)
     {

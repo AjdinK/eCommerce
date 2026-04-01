@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 
-namespace eCommerce.Services;
-
-public interface IProductService : IBaseReadService<ProductResponse, ProductSearchObject>
+namespace eCommerce.Services
 {
-    Task<ProductResponse> GetWithMaxNameAsync(ProductSearchObject? search = null);
+    public interface IProductService : IBaseReadService<ProductResponse, ProductSearchObject>
+    {
+        Task<ProductResponse> GetWithMaxNameAsync(ProductSearchObject? search = null);
+    }
 }

@@ -4,6 +4,14 @@ using eCommerce.Model.SearchObjects;
 
 namespace eCommerce.WebAPI.Controllers;
 
+/// <summary>
+/// Generic base controller for CRUD operations (Create, Read, Update, Delete)
+/// </summary>
+/// <typeparam name="TResponse">The response model type</typeparam>
+/// <typeparam name="TSearch">The search/filter object type</typeparam>
+/// <typeparam name="TInsertRequest">The insert request model type</typeparam>
+/// <typeparam name="TUpdateRequest">The update request model type</typeparam>
+/// <typeparam name="TService">The service interface type implementing CRUD operations</typeparam>
 [ApiController]
 [Route("[controller]")]
 public abstract class BaseCRUDController<TResponse, TSearch, TInsertRequest, TUpdateRequest, TService>
@@ -42,7 +50,10 @@ public abstract class BaseCRUDController<TResponse, TSearch, TInsertRequest, TUp
         {
             // Set the id in the update request
             var idProperty = typeof(TUpdateRequest).GetProperty("Id");
-            if (idProperty?.CanWrite == true) idProperty.SetValue(request, id);
+            if (idProperty?.CanWrite == true)
+            {
+                idProperty.SetValue(request, id);
+            }
 
             var result = await _service.UpdateAsync(request);
             return Ok(result);
