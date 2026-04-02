@@ -2,6 +2,7 @@ using eCommerce.Model.Requests;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.WebAPI.Controllers;
@@ -19,5 +20,11 @@ public class CategoriesController : BaseCRUDController<CategoryResponse, Categor
     {
         var result = await _service.ExceptionTestingInsertAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
+
+    [AllowAnonymous]
+    public override Task<PageResult<CategoryResponse>> GetAll([FromQuery] CategorySearchObject? search)
+    {
+        return base.GetAll(search);
     }
 }

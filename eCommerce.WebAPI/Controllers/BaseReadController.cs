@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using eCommerce.Services;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Model.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCommerce.WebAPI.Controllers;
 
@@ -11,6 +12,7 @@ namespace eCommerce.WebAPI.Controllers;
 /// <typeparam name="TResponse">The response model type</typeparam>
 /// <typeparam name="TSearch">The search/filter object type</typeparam>
 /// <typeparam name="TService">The service interface type implementing IBaseReadService</typeparam>
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public abstract class BaseReadController<TResponse, TSearch, TService> : ControllerBase
@@ -25,7 +27,7 @@ public abstract class BaseReadController<TResponse, TSearch, TService> : Control
     }
 
     [HttpGet]
-    public async Task<PageResult<TResponse>> GetAll([FromQuery] TSearch? search)
+    public virtual async Task<PageResult<TResponse>> GetAll([FromQuery] TSearch? search)
     {
         var results = await _service.GetAllAsync(search);
         return results;

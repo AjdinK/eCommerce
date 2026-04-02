@@ -1,4 +1,5 @@
 ﻿using eCommerce.Model.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
@@ -18,7 +19,18 @@ namespace eCommerce.WebAPI.Filters
         {
             _logger.LogError(context.Exception, "An exception occurred.");
 
-            if (context.Exception is ClinetException)
+            // FluentValidation exceptions should be converted into model state errors
+            if (context.Exception is FluentValidation.ValidationException fvEx)
+            {
+                foreach (var error in fvEx.Errors)
+                {
+                    // use property name (empty string for general errors) to key the message
+                    context.ModelState.AddModelError(error.PropertyName ?? string.Empty, error.ErrorMessage);
+                }
+
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else if (context.Exception is ClinetException)
             {
                 context.ModelState.AddModelError("clientError", context.Exception.Message);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;

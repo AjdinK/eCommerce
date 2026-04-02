@@ -8,7 +8,7 @@ namespace eCommerce.Services
         where TSearch : BaseSearchObject
     {
         Task<TResponse> InsertAsync(TInsertRequest request);
-        Task<TResponse> UpdateAsync(TUpdateRequest request);
+        Task<TResponse> UpdateAsync(int id, TUpdateRequest request);
         Task DeleteAsync(int id);
     }
 }

@@ -1,5 +1,6 @@
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
+using eCommerce.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +13,14 @@ namespace eCommerce.Services
         where TSearch : BaseSearchObject
     {
         protected readonly MapsterMapper.IMapper _mapper;
+        protected readonly ECommerceDbContext _dbContext;
 
-        protected BaseReadService(MapsterMapper.IMapper mapper)
+        protected BaseReadService(MapsterMapper.IMapper mapper, ECommerceDbContext dbContext)
         {
             _mapper = mapper;
+            _dbContext = dbContext;
         }
 
-        /// <summary>
-        /// Gets the in-memory data source for this entity type.
-        /// </summary>
-        protected abstract IEnumerable<TEntity> GetDataSource();
 
         /// <summary>
         /// Applies search filters to the query. Override in derived classes to implement specific filtering logic.
@@ -30,7 +29,7 @@ namespace eCommerce.Services
 
         public async Task<PageResult<TResponse>> GetAllAsync(TSearch? search = null)
         {
-            IEnumerable<TEntity> query = GetDataSource();
+            IEnumerable<TEntity> query = this._dbContext.Set<TEntity>();
             query = ApplyFilters(query, search);
 
             int? totalCount = null;
@@ -63,7 +62,7 @@ namespace eCommerce.Services
 
         public async Task<TResponse> GetByIdAsync(int id)
         {
-            var entity = GetDataSource().FirstOrDefault(e => (int)e.GetType().GetProperty("Id")?.GetValue(e)! == id);
+            var entity = this._dbContext.Set<TEntity>().Find(id);
             if (entity == null)
             {
                 throw new KeyNotFoundException($"{typeof(TEntity).Name} with id {id} not found.");

@@ -28,16 +28,8 @@ public abstract class BaseCRUDController<TResponse, TSearch, TInsertRequest, TUp
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TResponse>> Create([FromBody] TInsertRequest request)
     {
-        try
-        {
-            var result = await _service.InsertAsync(request);
-            var idValue = result?.GetType().GetProperty("Id")?.GetValue(result);
-            return CreatedAtAction(nameof(GetById), new { id = idValue }, result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var result = await _service.InsertAsync(request);
+        return result;
     }
 
     [HttpPut("{id}")]
@@ -46,26 +38,8 @@ public abstract class BaseCRUDController<TResponse, TSearch, TInsertRequest, TUp
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TResponse>> Update(int id, [FromBody] TUpdateRequest request)
     {
-        try
-        {
-            // Set the id in the update request
-            var idProperty = typeof(TUpdateRequest).GetProperty("Id");
-            if (idProperty?.CanWrite == true)
-            {
-                idProperty.SetValue(request, id);
-            }
-
-            var result = await _service.UpdateAsync(request);
-            return Ok(result);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var result = await _service.UpdateAsync(id, request);
+        return result;
     }
 
     [HttpDelete("{id}")]
@@ -73,14 +47,7 @@ public abstract class BaseCRUDController<TResponse, TSearch, TInsertRequest, TUp
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _service.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+         await _service.DeleteAsync(id);
+        return NoContent();
     }
 }
