@@ -12,8 +12,8 @@ using eCommerce.Services.Database;
 namespace eCommerce.Services.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    [Migration("20260307122355_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260402190455_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,6 +154,42 @@ namespace eCommerce.Services.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Electronic devices and accessories",
+                            IsActive = true,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Desktops, laptops and related hardware",
+                            IsActive = true,
+                            Name = "Computers",
+                            ParentCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Smartphones and mobile devices",
+                            IsActive = true,
+                            Name = "Mobile Phones",
+                            ParentCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Device accessories and peripherals",
+                            IsActive = true,
+                            Name = "Accessories"
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.Order", b =>
@@ -313,6 +349,99 @@ namespace eCommerce.Services.Migrations
                     b.HasIndex("UnitOfMeasureId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "High-performance laptop suitable for gaming and development",
+                            IsActive = true,
+                            Name = "Gaming Laptop",
+                            Price = 999.99m,
+                            ProductState = "New",
+                            SKU = "LAP-1000",
+                            StockQuantity = 10,
+                            Weight = 2500m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Latest generation smartphone with advanced camera features",
+                            IsActive = true,
+                            Name = "Smartphone X",
+                            Price = 699.99m,
+                            ProductState = "New",
+                            SKU = "PHN-2000",
+                            StockQuantity = 25,
+                            Weight = 180m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Ergonomic wireless mouse with long battery life",
+                            IsActive = true,
+                            Name = "Wireless Mouse",
+                            Price = 19.99m,
+                            ProductState = "New",
+                            SKU = "MSE-300",
+                            StockQuantity = 150,
+                            Weight = 100m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "65W USB-C fast charger compatible with laptops and phones",
+                            IsActive = true,
+                            Name = "USB-C Fast Charger",
+                            Price = 29.99m,
+                            ProductState = "New",
+                            SKU = "CHR-400",
+                            StockQuantity = 200,
+                            Weight = 120m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "RGB mechanical keyboard with tactile switches",
+                            IsActive = true,
+                            Name = "Mechanical Keyboard",
+                            Price = 89.99m,
+                            ProductState = "New",
+                            SKU = "KEY-500",
+                            StockQuantity = 75,
+                            Weight = 900m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Over-ear headphones with active noise cancellation",
+                            IsActive = true,
+                            Name = "Noise-Cancelling Headphones",
+                            Price = 199.99m,
+                            ProductState = "New",
+                            SKU = "HDP-600",
+                            StockQuantity = 40,
+                            Weight = 350m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "27-inch 4K UHD monitor with HDR and low response time",
+                            IsActive = true,
+                            Name = "27\" 4K Monitor",
+                            Price = 349.99m,
+                            ProductState = "New",
+                            SKU = "MON-700",
+                            StockQuantity = 30,
+                            Weight = 4500m
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.ProductCategory", b =>
@@ -346,6 +475,50 @@ namespace eCommerce.Services.Migrations
                     b.HasIndex("ProductId1");
 
                     b.ToTable("ProductCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 2,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 3,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 4,
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 4,
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 2,
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 2,
+                            ProductId = 7
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.ProductReview", b =>
@@ -417,6 +590,32 @@ namespace eCommerce.Services.Migrations
                     b.ToTable("ProductTypes");
                 });
 
+            modelBuilder.Entity("eCommerce.Services.Database.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("eCommerce.Services.Database.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -444,6 +643,24 @@ namespace eCommerce.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Administrator role with full permissions",
+                            IsActive = true,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Default customer role",
+                            IsActive = true,
+                            Name = "Customer"
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.UnitOfMeasure", b =>
@@ -535,6 +752,68 @@ namespace eCommerce.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin1@gmail.com",
+                            FirstName = "Alice",
+                            IsActive = true,
+                            LastName = "Admin",
+                            PasswordHash = "5kRBQg4Ufcx4hAknG7P9zhfLPvY=",
+                            PasswordSalt = "FmvmUwPsJyRRffhNRQvbrA==",
+                            Username = "admin1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin2@gmail.com",
+                            FirstName = "Bob",
+                            IsActive = true,
+                            LastName = "Admin",
+                            PasswordHash = "GBoyh1WP+OMgGjqRj6vK6L1+oGc=",
+                            PasswordSalt = "0AXpKx6xRp9xM42jCf/PiA==",
+                            Username = "admin2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin3@gmail.com",
+                            FirstName = "Carol",
+                            IsActive = true,
+                            LastName = "Admin",
+                            PasswordHash = "x6JHKCTQywdAzTcZxGWFvrKPORM=",
+                            PasswordSalt = "IwhTfKQNgyqWfOlTqCDXrg==",
+                            Username = "admin3"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "customer1@gmail.com",
+                            FirstName = "Dave",
+                            IsActive = true,
+                            LastName = "Customer",
+                            PasswordHash = "E0fA2/f9GZvIRRt/cgqQemG/Cog=",
+                            PasswordSalt = "TiJxWTJcd7sBSiWNbhK9Vw==",
+                            Username = "customer1"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "customer2@gmail.com",
+                            FirstName = "Eve",
+                            IsActive = true,
+                            LastName = "Customer",
+                            PasswordHash = "Ov4LxpWKXXV9dwMYvBgqODdzIt0=",
+                            PasswordSalt = "KtWF6g7SemBqs4nVWV4Ziw==",
+                            Username = "customer2"
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.UserRole", b =>
@@ -571,6 +850,43 @@ namespace eCommerce.Services.Migrations
                     b.HasIndex("UserId1");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = 1,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = 2,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = 2,
+                            UserId = 5
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.Asset", b =>
@@ -715,6 +1031,17 @@ namespace eCommerce.Services.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("eCommerce.Services.Database.RefreshToken", b =>
+                {
+                    b.HasOne("eCommerce.Services.Database.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("eCommerce.Services.Database.UserRole", b =>
                 {
                     b.HasOne("eCommerce.Services.Database.Role", "Role")
@@ -789,6 +1116,8 @@ namespace eCommerce.Services.Migrations
 
             modelBuilder.Entity("eCommerce.Services.Database.User", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
