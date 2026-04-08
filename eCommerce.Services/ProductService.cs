@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using eCommerce.Model.Requests;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Services.Database;
+using eCommerce.Services.ProductStateMachine;
 
 namespace eCommerce.Services;
 
 public class ProductService : BaseReadService<Product, ProductResponse, ProductSearchObject>, IProductService
 {
-    public ProductService(ECommerceDbContext dbContext, MapsterMapper.IMapper mapper) : base(mapper, dbContext)
+    protected BaseProductState ProductState { get; }
+    public ProductService(ECommerceDbContext dbContext, MapsterMapper.IMapper mapper, BaseProductState productState) : base(mapper, dbContext)
     {
+        ProductState = productState;
     }
 
 
@@ -31,6 +35,12 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
             {
                 query = query.Where(p => p.ProductTypeId == search.ProductTypeId.Value);
             }
+
+            if (!string.IsNullOrWhiteSpace(search.ProductState))
+            {
+                query = query.Where(p => p.ProductState.Equals(search.ProductState, StringComparison.OrdinalIgnoreCase));
+            }
+            
         }
 
         return query;
@@ -46,5 +56,85 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
         var response = _mapper.Map<ProductResponse>(productWithMaxName);
         return Task.FromResult(response);
 
+    }
+
+    public async Task<ProductResponse> ActivateAsync(int id)
+    {
+        var entity = await _dbContext.Products.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var state = ProductState.GetProductState(entity.ProductState);
+        return await state.ActivateAsync(id);
+    }
+
+    public async Task<List<string>> GetAllowedActionsAsync(int id)
+    {
+        if (id <= 0)
+        {
+             var initialState = ProductState.GetProductState(nameof(InitialProductState));
+             return initialState.GetAllowedActions();
+        }
+
+        var entity = await _dbContext.Products.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var state = ProductState.GetProductState(entity.ProductState);
+        return state.GetAllowedActions();
+    }
+
+    public async Task<ProductResponse> DeactivateAsync(int id)
+    {
+        var entity = await _dbContext.Products.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var state = ProductState.GetProductState(entity.ProductState);
+        return await state.DeactivateAsync(id);
+    }
+
+    public Task<ProductResponse> InsertAsync(ProductInsertRequest request)
+    {
+        var state = ProductState.GetProductState(nameof(InitialProductState));
+        return state.InsertAsync(request);
+    }
+
+    public async Task<ProductResponse> UpdateAsync(int id, ProductUpdateRequest request)
+    {
+        var entity = await _dbContext.Products.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var state = ProductState.GetProductState(entity.ProductState);
+        return await state.UpdateAsync(id, request);
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var entity = await _dbContext.Products.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var state = ProductState.GetProductState(entity.ProductState);
+        await state.DeleteAsync(id);
+    }
+
+    public override async Task<ProductResponse> GetByIdAsync(int id)
+    {
+        var entity = await base.GetByIdAsync(id);
+        entity.AllowedActions = await GetAllowedActionsAsync(id);
+
+        return entity;
     }
 }

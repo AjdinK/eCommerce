@@ -8,5 +8,6 @@ namespace eCommerce.Model.SearchObjects
         public int? PageSize { get; set; } = 10;
 
         public bool? IncludeTotalCount { get; set; } = false;
+        public string? SortBy { get; set; } 
     }
 }

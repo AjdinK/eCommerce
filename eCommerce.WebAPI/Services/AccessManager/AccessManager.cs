@@ -34,13 +34,13 @@ namespace eCommerce.WebAPI.Services.AccessManager
 
             if (user == null)
             {
-                throw new ClinetException($"User with {request.Username} doesn't exist");
+                throw new Exception($"User with {request.Username} doesn't exist");
             }
 
             var validPassword = _cryptoService.Verify(user.PasswordHash, user.PasswordSalt, request.Password);
             if (!validPassword)
             {
-                throw new ClinetException("Wrong credential");
+                throw new Exception("Wrong credential");
             }
 
             var accessToken = GenerateToken(user);
@@ -81,7 +81,7 @@ namespace eCommerce.WebAPI.Services.AccessManager
                 throw new ClinetException("Refresh token has expired");
             }
 
-            var user = await _userService.GetByIdAsync(refreshToken.UserId);
+            var user = await _userService.GetWithRoleByIdAsync(refreshToken.UserId);
 
             if (user == null)
             {
@@ -132,6 +132,7 @@ namespace eCommerce.WebAPI.Services.AccessManager
                     new Claim(ClaimNames.FirstName, user.FirstName),
                     new Claim(ClaimNames.LastName, user.LastName),
                     new Claim(ClaimNames.Email, user.Email),
+                    new Claim(ClaimNames.Role, user.Role),
                     new Claim(ClaimNames.IsActive, user.IsActive.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(durationInMinutes),

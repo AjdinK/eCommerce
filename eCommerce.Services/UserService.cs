@@ -1,3 +1,4 @@
+using eCommerce.Common.Services.CryptoService;
 using eCommerce.Model.Access;
 using eCommerce.Model.Exceptions;
 using eCommerce.Model.Requests;
@@ -17,9 +18,11 @@ namespace eCommerce.Services
 {
     public class UserService : BaseCRUDService<User, UserResponse, UserSearch, UserInsertRequest, UserUpdateRequest>, IUserService
     {
-        public UserService(ECommerceDbContext dbContext, MapsterMapper.IMapper mapper, IValidator<UserInsertRequest> insertValidator, IValidator<UserUpdateRequest> updateValidator)
+        private readonly ICryptoService _cryptoService;
+        public UserService(ECommerceDbContext dbContext, MapsterMapper.IMapper mapper, IValidator<UserInsertRequest> insertValidator, IValidator<UserUpdateRequest> updateValidator, ICryptoService cryptoService)
             : base(dbContext, mapper, insertValidator, updateValidator)
         {
+            _cryptoService = cryptoService;
         }
 
 
@@ -52,39 +55,14 @@ namespace eCommerce.Services
             return query;
         }
 
-        /// <summary>
-        /// Generates a random salt for password hashing.
-        /// </summary>
-        private static string GenerateSalt()
-        {
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                byte[] saltBytes = new byte[16];
-                rng.GetBytes(saltBytes);
-                return Convert.ToBase64String(saltBytes);
-            }
-        }
-
-        /// <summary>
-        /// Hashes a password using PBKDF2 with the provided salt.
-        /// </summary>
-        private static string HashPassword(string password, string salt)
-        {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000, HashAlgorithmName.SHA256))
-            {
-                byte[] hash = pbkdf2.GetBytes(20);
-                return Convert.ToBase64String(hash);
-            }
-        }
-
         protected override User MapInsertRequestToEntity(UserInsertRequest request)
         {
             var entity = base.MapInsertRequestToEntity(request);
 
             // Handle password hashing for User entity
-            var salt = GenerateSalt();
+            var salt = _cryptoService.GenerateSlat();
             entity.PasswordSalt = salt;
-            entity.PasswordHash = HashPassword(request.Password, salt);
+            entity.PasswordHash = _cryptoService.GenerateHash(request.Password, salt);
 
             return entity;
         }
@@ -95,6 +73,17 @@ namespace eCommerce.Services
             // convert the resulting ValidationException into the standard error format.
             await _insertValidator.ValidateAndThrowAsync(request);
 
+            // Check if email or username already exists
+            if (await _dbContext.Users.AnyAsync(u => u.Email == request.Email))
+            {
+                throw new InvalidOperationException($"Email '{request.Email}' is already in use.");
+            }
+
+            if (await _dbContext.Users.AnyAsync(u => u.Username == request.Username))
+            {
+                throw new InvalidOperationException($"Username '{request.Username}' is already in use.");
+            }
+
             var entity = MapInsertRequestToEntity(request);
             entity.CreatedAt = DateTime.UtcNow;
 
@@ -104,25 +93,6 @@ namespace eCommerce.Services
             return _mapper.Map<UserResponse>(entity);
         }
 
-        public async Task<UserResponse> LoginAsync(UserLoginRequest request)
-        {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-            if (user == null || !user.IsActive)
-            {
-                return null; // User not found or inactive
-            }
-
-            var hashedInputPassword = HashPassword(request.Password, user.PasswordSalt);
-            if (hashedInputPassword == user.PasswordHash)
-            {
-                user.LastLoginAt = DateTime.UtcNow;
-                this._dbContext.Users.Update(user);
-                await this._dbContext.SaveChangesAsync();
-                return _mapper.Map<UserResponse>(user); // Authentication successful
-            }
-
-            return null; // Authentication failed
-        }
 
         public override async Task<UserResponse> UpdateAsync(int id, UserUpdateRequest request)
         {
@@ -132,6 +102,17 @@ namespace eCommerce.Services
             if (entity == null)
             {
                 throw new KeyNotFoundException($"User with id {id} not found.");
+            }
+
+            // Check if email or username already exists
+            if (await _dbContext.Users.AnyAsync(u => u.Email == request.Email && u.Id != id))
+            {
+                throw new InvalidOperationException($"Email '{request.Email}' is already in use.");
+            }
+
+            if (await _dbContext.Users.AnyAsync(u => u.Username == request.Username && u.Id != id))
+            {
+                throw new InvalidOperationException($"Username '{request.Username}' is already in use.");
             }
 
             MapUpdateRequestToEntity(request, entity);
@@ -154,16 +135,40 @@ namespace eCommerce.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<UserSensitveResponse> GetByUsernameAsync(string username)
+        public async Task<UserSensitveResponse?> GetByUsernameAsync(string username)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _dbContext.Users
+                .AsNoTracking()
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == null)
+            UserSensitveResponse? response = null;
+
+            if (user != null)
             {
-                throw new ClinetException($"User with username '{username}' not found.");
+                response = _mapper.Map<UserSensitveResponse>(user);
+                response.Role = user.UserRoles.First().Role.Name;
             }
 
-            var response = _mapper.Map<UserSensitveResponse>(user);
+            return response;
+        }
+
+        public async Task<UserResponse?> GetWithRoleByIdAsync(int id)
+        {
+            var user = await _dbContext.Users
+               .AsNoTracking()
+               .Include(u => u.UserRoles)
+               .ThenInclude(ur => ur.Role)
+               .FirstOrDefaultAsync(u => u.Id == id);
+
+            UserResponse? response = null;
+
+            if (user != null)
+            {
+                response = _mapper.Map<UserResponse>(user);
+                response.Role = user.UserRoles.First().Role.Name;
+            }
 
             return response;
         }

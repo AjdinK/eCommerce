@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace eCommerce.Services
 {
@@ -27,7 +28,7 @@ namespace eCommerce.Services
         /// </summary>
         protected abstract IEnumerable<TEntity> ApplyFilters(IEnumerable<TEntity> query, TSearch? search);
 
-        public async Task<PageResult<TResponse>> GetAllAsync(TSearch? search = null)
+        public virtual async Task<PageResult<TResponse>> GetAllAsync(TSearch? search = null)
         {
             IEnumerable<TEntity> query = this._dbContext.Set<TEntity>();
             query = ApplyFilters(query, search);
@@ -37,6 +38,12 @@ namespace eCommerce.Services
             if (search.IncludeTotalCount ?? false)
             {
                 totalCount = query.Count();
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.SortBy))
+            {
+                //TODO: parametrize sortBy to prevent SQL injection
+                query = query.AsQueryable().OrderBy(search.SortBy);
             }
 
             if (search.Page.HasValue)
@@ -60,7 +67,7 @@ namespace eCommerce.Services
             return await Task.FromResult(pageResult);
         }
 
-        public async Task<TResponse> GetByIdAsync(int id)
+        public virtual async Task<TResponse> GetByIdAsync(int id)
         {
             var entity = this._dbContext.Set<TEntity>().Find(id);
             if (entity == null)

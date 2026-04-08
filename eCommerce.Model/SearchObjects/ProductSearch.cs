@@ -16,5 +16,7 @@ namespace eCommerce.Model.SearchObjects
         /// Filter products by product type id.
         /// </summary>
         public int? ProductTypeId { get; set; }
+
+        public string? ProductState { get; set; }
     }
 }

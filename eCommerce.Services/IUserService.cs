@@ -7,7 +7,7 @@ namespace eCommerce.Services
 {
     public interface IUserService : IBaseCRUDService<UserResponse, UserSearch, UserInsertRequest, UserUpdateRequest>
     {
-        Task<UserResponse> LoginAsync(UserLoginRequest request);
-        Task<UserSensitveResponse> GetByUsernameAsync(string username);
+        Task<UserSensitveResponse?> GetByUsernameAsync(string username);
+        Task<UserResponse?> GetWithRoleByIdAsync(int id);
     }
 }

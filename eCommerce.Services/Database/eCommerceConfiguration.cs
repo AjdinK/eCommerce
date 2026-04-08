@@ -16,26 +16,26 @@ namespace eCommerce.Services.Database
             // Configure ProductCategory relationships
             modelBuilder.Entity<ProductCategory>()
                 .HasOne(pc => pc.Product)
-                .WithMany()
+                .WithMany(pc => pc.ProductCategories)
                 .HasForeignKey(pc => pc.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductCategory>()
                 .HasOne(pc => pc.Category)
-                .WithMany()
+                .WithMany(pc => pc.ProductCategories)
                 .HasForeignKey(pc => pc.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configure UserRole relationships
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur => ur.User)
-                .WithMany()
+                .WithMany(ur => ur.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur => ur.Role)
-                .WithMany()
+                .WithMany(ur => ur.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 

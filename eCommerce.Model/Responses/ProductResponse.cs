@@ -14,5 +14,9 @@ namespace eCommerce.Model.Responses
         public decimal? Weight { get; set; }
         public int? ProductTypeId { get; set; }
         public int? UnitOfMeasureId { get; set; }
+
+        public string ProductState { get; set; }
+
+        public List<string> AllowedActions { get; set; } = new List<string>();
     }
 }

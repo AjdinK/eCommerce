@@ -3,6 +3,8 @@ using eCommerce.Model.Requests;
 using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Services;
+using eCommerce.WebAPI.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.WebAPI.Controllers;
@@ -15,11 +17,10 @@ public class UsersController : BaseCRUDController<UserResponse, UserSearch, User
     {
     }
 
-    [HttpPost("Login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<UserResponse> Login(UserLoginRequest request)
+    [Authorization("Admin")]
+    public override Task<PageResult<UserResponse>> GetAll([FromQuery] UserSearch? search)
     {
-        var result = await _service.LoginAsync(request);
-        return result;
+        return base.GetAll(search);
     }
+   
 }

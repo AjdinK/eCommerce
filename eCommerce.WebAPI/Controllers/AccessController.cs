@@ -1,5 +1,7 @@
 ﻿using Azure;
 using eCommerce.Model.Access;
+using eCommerce.Model.Requests;
+using eCommerce.Services;
 using eCommerce.WebAPI.Services.AccessManager;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,12 @@ namespace eCommerce.WebAPI.Controllers
     public class AccessController : Controller
     {
         private readonly IAccessManager _accessManager;
+        private readonly IUserService _userService;
 
-        public AccessController(IAccessManager accessManager)
+        public AccessController(IAccessManager accessManager, IUserService userService)
         {
             _accessManager = accessManager;
+            _userService = userService;
         }
 
         [HttpPost("Login")]
@@ -30,5 +34,11 @@ namespace eCommerce.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] UserInsertRequest request)
+        {
+            await _userService.InsertAsync(request);
+            return Ok("You have registered successfully");
+        }
     }
 }
