@@ -129,10 +129,10 @@ namespace eCommerce.WebAPI.Services.AccessManager
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimNames.Id, user.Id.ToString()),
-                    new Claim(ClaimNames.FirstName, user.FirstName),
-                    new Claim(ClaimNames.LastName, user.LastName),
-                    new Claim(ClaimNames.Email, user.Email),
-                    new Claim(ClaimNames.Role, user.Role),
+                    new Claim(ClaimNames.FirstName, user.FirstName ?? string.Empty),
+                    new Claim(ClaimNames.LastName, user.LastName ?? string.Empty),
+                    new Claim(ClaimNames.Email, user.Email ?? string.Empty),
+                    new Claim(ClaimNames.Role, user.Role ?? "user"),
                     new Claim(ClaimNames.IsActive, user.IsActive.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(durationInMinutes),

@@ -17,7 +17,7 @@ public class UsersController : BaseCRUDController<UserResponse, UserSearch, User
     {
     }
 
-    [Authorization("Admin")]
+    //[Authorization("Admin")]
     public override Task<PageResult<UserResponse>> GetAll([FromQuery] UserSearch? search)
     {
         return base.GetAll(search);

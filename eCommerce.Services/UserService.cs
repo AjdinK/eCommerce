@@ -148,7 +148,7 @@ namespace eCommerce.Services
             if (user != null)
             {
                 response = _mapper.Map<UserSensitveResponse>(user);
-                response.Role = user.UserRoles.First().Role.Name;
+                response.Role = user.UserRoles.FirstOrDefault()?.Role.Name;
             }
 
             return response;
