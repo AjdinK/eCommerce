@@ -1,3 +1,4 @@
+using eCommerce.Services.ProductStateMachine;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Services.Database
@@ -6,12 +7,82 @@ namespace eCommerce.Services.Database
     {
         private void CreateSeed(ModelBuilder modelBuilder)
         {
+            SeedProductTypes(modelBuilder);
+            SeedUnitsOfMeasure(modelBuilder);
             SeedCategories(modelBuilder);
             SeedProducts(modelBuilder);
             SeedProductCategories(modelBuilder);
             SeedRoles(modelBuilder);
             SeedUsers(modelBuilder);
             SeedUserRoles(modelBuilder);
+        }
+
+        private void SeedProductTypes(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductType>().HasData(
+                new
+                {
+                    Id = 1,
+                    Name = "Physical",
+                    Description = "Tangible products that require shipping",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                },
+                new
+                {
+                    Id = 2,
+                    Name = "Digital",
+                    Description = "Intangible products that can be downloaded",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                },
+                new
+                {
+                    Id = 3,
+                    Name = "Service",
+                    Description = "Non-physical products that provide a service",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                }
+            );
+        }
+
+        private void SeedUnitsOfMeasure(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UnitOfMeasure>().HasData(
+               new
+               {
+                   Id = 1,
+                   Name = "Piece",
+                   Abbreviation = "pc",
+                   IsActive = true,
+                   Description = "",
+                   CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                   UpdatedAt = (DateTime?)null
+               },
+               new
+               {
+                   Id = 2,
+                   Name = "Kilogram",
+                   Abbreviation = "kg",
+                   Description = "",
+                   IsActive = true,
+                   CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                   UpdatedAt = (DateTime?)null
+               },
+               new
+               {
+                   Id = 3,
+                   Name = "Liter",
+                   Abbreviation = "L",
+                   Description = "",
+                   IsActive = true,
+                   CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                   UpdatedAt = (DateTime?)null
+               });
         }
 
         private void SeedCategories(ModelBuilder modelBuilder)
@@ -79,7 +150,7 @@ namespace eCommerce.Services.Database
                     Weight = 2500m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -95,7 +166,7 @@ namespace eCommerce.Services.Database
                     Weight = 180m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -111,7 +182,7 @@ namespace eCommerce.Services.Database
                     Weight = 100m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -127,7 +198,7 @@ namespace eCommerce.Services.Database
                     Weight = 120m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -143,7 +214,7 @@ namespace eCommerce.Services.Database
                     Weight = 900m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -159,7 +230,7 @@ namespace eCommerce.Services.Database
                     Weight = 350m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 },
                 new
                 {
@@ -175,7 +246,7 @@ namespace eCommerce.Services.Database
                     Weight = 4500m,
                     ProductTypeId = (int?)null,
                     UnitOfMeasureId = (int?)null,
-                    ProductState = "New"
+                    ProductState = nameof(DraftProductState)
                 }
             );
         }

@@ -27,5 +27,7 @@ namespace eCommerce.Model.Requests
                 
         // Unit of Measure relationship
         public int? UnitOfMeasureId { get; set; }
+        public List<AssetInsertRequest>? Assets { get; set; }
     }
 }
+

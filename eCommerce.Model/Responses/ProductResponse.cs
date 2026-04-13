@@ -16,7 +16,7 @@ namespace eCommerce.Model.Responses
         public int? UnitOfMeasureId { get; set; }
 
         public string ProductState { get; set; }
-
+        public ProductTypeResponse ProductType { get; set; }
         public List<string> AllowedActions { get; set; } = new List<string>();
     }
 }

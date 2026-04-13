@@ -18,5 +18,9 @@ namespace eCommerce.Model.SearchObjects
         public int? ProductTypeId { get; set; }
 
         public string? ProductState { get; set; }
+
+        public bool? IncludeProductType { get; set; }
+
+        public bool? IncludeUnitOfMeasure { get; set; }
     }
 }

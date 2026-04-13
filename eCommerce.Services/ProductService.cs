@@ -6,6 +6,7 @@ using eCommerce.Model.Responses;
 using eCommerce.Model.SearchObjects;
 using eCommerce.Services.Database;
 using eCommerce.Services.ProductStateMachine;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Services;
 
@@ -18,6 +19,18 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
     }
 
 
+    protected override Task<IQueryable<Product>> IncludeRelatedEntitiesAsync(ProductSearchObject? search, IQueryable<Product> query = null)
+    {
+        if (search?.IncludeProductType == true)
+        {
+            query = query.Include(p => p.ProductType);
+        }
+        if (search?.IncludeUnitOfMeasure == true)
+        {
+            query = query.Include(p => p.UnitOfMeasure);
+        }
+        return base.IncludeRelatedEntitiesAsync(search, query);
+    }
 
     protected override IEnumerable<Product> ApplyFilters(IEnumerable<Product> query, ProductSearchObject? search)
     {

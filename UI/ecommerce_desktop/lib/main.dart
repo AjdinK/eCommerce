@@ -1,13 +1,25 @@
+import 'package:ecommerce_desktop/providers/auth_provider.dart';
 import 'package:ecommerce_desktop/providers/product_provider.dart';
+import 'package:ecommerce_desktop/providers/product_type_provider.dart';
+import 'package:ecommerce_desktop/providers/unit_of_measure_provider.dart';
 import 'package:ecommerce_desktop/screens/product_list.dart';
+import 'package:ecommerce_desktop/utils/utils_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'providers/asset_provider.dart';
+import 'providers/category_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_)=> AuthProvider()),
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
+        ChangeNotifierProvider(create: (_)=> ProductTypeProvider()),
+        ChangeNotifierProvider(create: (_)=> UnitOfMeasureProvider()),
+        ChangeNotifierProvider(create: (_)=> AssetProvider()),
+        ChangeNotifierProvider(create: (_)=> CategoryProvider()),
       ],
       child: const MyApp()));
 }
@@ -39,13 +51,15 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.blue),
       ),
-      home: const LoginScreen(),
+      home: LoginScreen(),
     );
   }
 }
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +82,16 @@ class LoginScreen extends StatelessWidget {
                     width: 100,
                     height: 100,),
                     TextField(
+                      controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: "Username",
                       ),
                     ),
                     SizedBox(height: 16.0,),
                     TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+
                       decoration: InputDecoration(
                         labelText: "Password",
 
@@ -82,8 +100,15 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 16.0,),
                     ElevatedButton(
                       child: Text("Login"),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductList()));
+                      onPressed: () async {
+
+                        AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+                        try {
+                          await authProvider.login(_usernameController.text, _passwordController.text);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductList()));
+                        } on Exception catch (e) {
+                          alertBox(context, "Error", e.toString());
+                        }
                         // Handle login logic here
                         print("Login button pressed");
                       },
@@ -116,21 +141,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      // _counter++;
-    });
-
-    _counter++;
-    print(_counter);
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -33,6 +33,8 @@ namespace eCommerce.Services
             IEnumerable<TEntity> query = this._dbContext.Set<TEntity>();
             query = ApplyFilters(query, search);
 
+            query = await IncludeRelatedEntitiesAsync(search, query.AsQueryable());
+
             int? totalCount = null;
 
             if (search.IncludeTotalCount ?? false)
@@ -66,6 +68,13 @@ namespace eCommerce.Services
 
             return await Task.FromResult(pageResult);
         }
+
+        protected virtual async Task<IQueryable<TEntity>> IncludeRelatedEntitiesAsync(TSearch? search, IQueryable<TEntity> query = null)
+        {
+            // Override in derived classes to include related entities if necessary
+            return query;
+        }
+
 
         public virtual async Task<TResponse> GetByIdAsync(int id)
         {

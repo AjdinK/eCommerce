@@ -1,6 +1,12 @@
 import 'package:ecommerce_desktop/screens/product_details_screen.dart';
 import 'package:ecommerce_desktop/screens/product_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../main.dart';
+import '../providers/auth_provider.dart';
+import '../screens/category_list.dart';
+import '../utils/utils_widgets.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key, required this.child, required this.title});
@@ -52,6 +58,15 @@ class _MasterScreenState extends State<MasterScreen> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.category),
+              title: Text('Categories'),
+              onTap: () {
+                // Handle Categories navigation
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryList()));
+              },
+            ),
+           
+            ListTile(
               leading: Icon(Icons.shopping_cart),
               title: Text('Cart'),
               onTap: () {
@@ -73,6 +88,46 @@ class _MasterScreenState extends State<MasterScreen> {
               onTap: () {
                 // Handle Profile navigation
                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailsScreen()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                  showDialog(
+                    context: context, builder: (BuildContext context) => AlertDialog(
+                      title: Text("Logout"),
+                      content: Text("Are you sure you want to logout?"),
+                      actions: [
+                        TextButton(
+                          onPressed: (() {
+                            Navigator.pop(context);
+                          }),
+                          child: Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            try {
+                              AuthProvider authProvider = context
+                                  .read<AuthProvider>();
+
+                              authProvider.logout();
+
+                              //throw Exception("Logout successful");
+
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (_) => LoginScreen()),
+                                (route) => false,
+                              );
+                            } catch (e) {
+                              alertBoxMoveBack(context, "Error", e.toString());
+                            }
+                          },
+                          child: Text("Yes"),
+                        ),
+                      ],
+                    ));
               },
             ),
           ],

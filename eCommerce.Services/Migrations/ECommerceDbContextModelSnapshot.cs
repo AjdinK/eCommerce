@@ -356,7 +356,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "Gaming Laptop",
                             Price = 999.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "LAP-1000",
                             StockQuantity = 10,
                             Weight = 2500m
@@ -369,7 +369,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "Smartphone X",
                             Price = 699.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "PHN-2000",
                             StockQuantity = 25,
                             Weight = 180m
@@ -382,7 +382,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "Wireless Mouse",
                             Price = 19.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "MSE-300",
                             StockQuantity = 150,
                             Weight = 100m
@@ -395,7 +395,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "USB-C Fast Charger",
                             Price = 29.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "CHR-400",
                             StockQuantity = 200,
                             Weight = 120m
@@ -408,7 +408,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "Mechanical Keyboard",
                             Price = 89.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "KEY-500",
                             StockQuantity = 75,
                             Weight = 900m
@@ -421,7 +421,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "Noise-Cancelling Headphones",
                             Price = 199.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "HDP-600",
                             StockQuantity = 40,
                             Weight = 350m
@@ -434,7 +434,7 @@ namespace eCommerce.Services.Migrations
                             IsActive = true,
                             Name = "27\" 4K Monitor",
                             Price = 349.99m,
-                            ProductState = "New",
+                            ProductState = "DraftProductState",
                             SKU = "MON-700",
                             StockQuantity = 30,
                             Weight = 4500m
@@ -575,6 +575,32 @@ namespace eCommerce.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Tangible products that require shipping",
+                            IsActive = true,
+                            Name = "Physical"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Intangible products that can be downloaded",
+                            IsActive = true,
+                            Name = "Digital"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Non-physical products that provide a service",
+                            IsActive = true,
+                            Name = "Service"
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.RefreshToken", b =>
@@ -685,6 +711,35 @@ namespace eCommerce.Services.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UnitOfMeasures");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Abbreviation = "pc",
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "",
+                            IsActive = true,
+                            Name = "Piece"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Abbreviation = "kg",
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "",
+                            IsActive = true,
+                            Name = "Kilogram"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Abbreviation = "L",
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "",
+                            IsActive = true,
+                            Name = "Liter"
+                        });
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.User", b =>

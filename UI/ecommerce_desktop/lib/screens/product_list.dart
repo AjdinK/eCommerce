@@ -48,11 +48,14 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     return MasterScreen(
       title: "Product List",
-      child: Column(
-        children: [
-          _buildSearch(),
-          isLoading ? CircularProgressIndicator() : _buildTable()
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildSearch(),
+            isLoading ? CircularProgressIndicator() : _buildTable()
+          ],
+        ),
       ),
     );
   }
@@ -68,21 +71,74 @@ class _ProductListState extends State<ProductList> {
                   DataColumn(label: Text("Weight")),
                   DataColumn(label: Text("Price")),
                   DataColumn(label: Text("Product State")),
+                  DataColumn(label: Text("Delete")),
                 ],
                   rows: result?.items
                   ?.map(
                     (e) => DataRow(
-                      onSelectChanged: (value) {
-                        Navigator.of(context)
+                      onSelectChanged: (value) async {
+                        var refresh = await Navigator.of(context)
                                 .push(MaterialPageRoute(
                               builder: (context) => ProductDetailsScreen(product: e),
                             ));
+                        
+                        if (refresh == "reload") {
+                          initTable();
+                        }
                       },
                       cells: [
                       DataCell(Text(e.name ?? '')),
                       DataCell(Text(e.weight.toString())),
                       DataCell(Text(e.price.toString())),
-                      DataCell(Text(e.productState ?? ''))
+                      DataCell(Text(e.productState ?? '')),
+                      DataCell(
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Delete"),
+                                content: Text("Are you sure you want to delete this product?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      try {
+                                        await _productProvider.remove(e.id!);
+
+                                         ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  "Product deleted successfully",
+                                                ),
+                                              ),
+                                            );
+                                            
+                                            Navigator.pop(context);
+
+                                            setState(() {
+                                              initTable();
+                                            });
+                                      } on Exception catch (e) {
+                                        alertBoxMoveBack(context, "Error", e.toString());
+                                      }
+                                    },
+                                    child: Text("Yes"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ]),
                   )
                   .toList() ?? List.empty(),

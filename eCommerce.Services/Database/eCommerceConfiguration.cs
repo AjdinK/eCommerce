@@ -39,6 +39,12 @@ namespace eCommerce.Services.Database
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Asset>()
+               .HasOne(a => a.Product)
+               .WithMany(p => p.Assets)
+               .HasForeignKey(a => a.ProductId)
+               .OnDelete(DeleteBehavior.Cascade);
+
             // Add any additional model configurations here
         }
     }
