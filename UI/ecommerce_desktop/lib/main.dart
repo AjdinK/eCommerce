@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/asset_provider.dart';
 import 'providers/category_provider.dart';
+import 'providers/user_provider.dart';
 
 void main() {
   runApp(
@@ -20,6 +21,7 @@ void main() {
         ChangeNotifierProvider(create: (_)=> UnitOfMeasureProvider()),
         ChangeNotifierProvider(create: (_)=> AssetProvider()),
         ChangeNotifierProvider(create: (_)=> CategoryProvider()),
+        ChangeNotifierProvider(create: (_)=> UserProvider()),
       ],
       child: const MyApp()));
 }

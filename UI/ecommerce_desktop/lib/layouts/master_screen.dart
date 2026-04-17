@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import '../providers/auth_provider.dart';
 import '../screens/category_list.dart';
+import '../screens/user_list.dart';
 import '../utils/utils_widgets.dart';
 
 class MasterScreen extends StatefulWidget {
@@ -66,6 +67,13 @@ class _MasterScreenState extends State<MasterScreen> {
               },
             ),
            
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Users'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserList()));
+              },
+            ),
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: Text('Cart'),

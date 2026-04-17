@@ -99,10 +99,7 @@ namespace eCommerce.Services
                 throw new FluentValidation.ValidationException(errors);
             }
 
-            var idProperty = typeof(TUpdateRequest).GetProperty("Id");
-            if (idProperty == null)
-                throw new InvalidOperationException($"{typeof(TUpdateRequest).Name} must have an Id property.");
-
+           
             var entity = this._dbContext.Set<TEntity>().Find(id);
 
             if (entity == null)
@@ -116,6 +113,8 @@ namespace eCommerce.Services
             {
                 updatedAtProperty.SetValue(entity, DateTime.UtcNow);
             }
+
+            await this._dbContext.SaveChangesAsync();
 
             return await Task.FromResult(_mapper.Map<TResponse>(entity));
         }

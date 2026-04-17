@@ -43,7 +43,7 @@ class AuthProvider extends ChangeNotifier {
     } else {
       throw Exception("Unknown error");
     }
-
+  
   }
 
 
@@ -74,5 +74,5 @@ class AuthProvider extends ChangeNotifier {
 
     return headers;
   }
-
+  
 }

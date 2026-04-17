@@ -1,6 +1,7 @@
 import 'package:ecommerce_desktop/layouts/master_screen.dart';
 import 'package:ecommerce_desktop/models/search_result.dart';
 import 'package:ecommerce_desktop/providers/category_provider.dart';
+import 'package:ecommerce_desktop/screens/category_details_screen.dart';
 import 'package:ecommerce_desktop/utils/utils_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,14 +77,14 @@ class _CategoryListState extends State<CategoryList> {
                   ?.map(
                     (e) => DataRow(
                       onSelectChanged: (value) async {
-                        // var refresh = await Navigator.of(context)
-                        //         .push(MaterialPageRoute(
-                        //       builder: (context) => ProductDetailsScreen(product: e),
-                        //     ));
+                        var refresh = await Navigator.of(context)
+                                .push(MaterialPageRoute(
+                              builder: (context) => CategoryDetailsScreen(category: e),
+                            ));
                         
-                        // if (refresh == "reload") {
-                        //   initTable();
-                        // }
+                        if (refresh == "reload") {
+                          initTable();
+                        }
                       },
                       cells: [
                       DataCell(Text(e.name ?? '')),
@@ -175,17 +176,17 @@ class _CategoryListState extends State<CategoryList> {
                 width: 10,
               ),
               ElevatedButton(onPressed: () async {
-                // var refresh = await Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const ProductDetailsScreen(
-                //       product: null,
-                //     )
-                //   )
-                // );
+                var refresh = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CategoryDetailsScreen(
+                      category: null,
+                    )
+                  )
+                );
 
-                // if( refresh == "reload"){
-                //   initTable();
-                // }
+                if( refresh == "reload"){
+                  initTable();
+                }
               }, child: Text("New")),
             ],
           ),
