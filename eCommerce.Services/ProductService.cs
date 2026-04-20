@@ -29,6 +29,10 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
         {
             query = query.Include(p => p.UnitOfMeasure);
         }
+        if (search?.IncludeAssets == true)
+        {
+            query = query.Include(p => p.Assets);
+        }
         return base.IncludeRelatedEntitiesAsync(search, query);
     }
 

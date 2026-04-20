@@ -18,5 +18,6 @@ namespace eCommerce.Model.Responses
         public string ProductState { get; set; }
         public ProductTypeResponse ProductType { get; set; }
         public List<string> AllowedActions { get; set; } = new List<string>();
+        public List<AssetResponse> Assets { get; set; } = new List<AssetResponse>();
     }
 }

@@ -1,5 +1,6 @@
+import 'package:ecommerce_mobile/layouts/container_screen.dart';
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
-import 'package:ecommerce_mobile/screens/product_list_screen.dart';
+import 'package:ecommerce_mobile/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_)=> AuthProvider()),
+        ChangeNotifierProvider(create: (_)=> ProductProvider()),
       ],
       child: const MyApp()));
 }
@@ -141,7 +143,7 @@ class LoginPage extends StatelessWidget {
                     try {
                         AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
                         await authProvider.login(_usernameController.text, _passwordController.text);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductListScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ContainerScreen()));
                       } on Exception catch (e) {
                         alertBox(context, "Error", e.toString());
                       }

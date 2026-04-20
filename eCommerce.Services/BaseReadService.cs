@@ -31,9 +31,9 @@ namespace eCommerce.Services
         public virtual async Task<PageResult<TResponse>> GetAllAsync(TSearch? search = null)
         {
             IEnumerable<TEntity> query = this._dbContext.Set<TEntity>();
-            query = ApplyFilters(query, search);
 
             query = await IncludeRelatedEntitiesAsync(search, query.AsQueryable());
+            query = ApplyFilters(query, search);
 
             int? totalCount = null;
 

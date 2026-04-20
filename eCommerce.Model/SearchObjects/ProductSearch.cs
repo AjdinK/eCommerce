@@ -22,5 +22,6 @@ namespace eCommerce.Model.SearchObjects
         public bool? IncludeProductType { get; set; }
 
         public bool? IncludeUnitOfMeasure { get; set; }
+        public bool? IncludeAssets { get; set; }
     }
 }
