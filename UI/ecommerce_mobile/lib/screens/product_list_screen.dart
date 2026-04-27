@@ -1,5 +1,6 @@
 import 'package:ecommerce_mobile/models/product.dart';
 import 'package:ecommerce_mobile/models/search_result.dart';
+import 'package:ecommerce_mobile/providers/cart_provider.dart';
 import 'package:ecommerce_mobile/providers/product_provider.dart';
 import 'package:ecommerce_mobile/screens/product_details_screen.dart';
 import 'package:ecommerce_mobile/utils/utils_widgets.dart';
@@ -15,6 +16,7 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   late ProductProvider _productProvider;
+  late CartProvider _cartProvider;
 
   SearchResult<Product>? productResult;
 
@@ -28,6 +30,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.initState();
 
     _productProvider = context.read<ProductProvider>();
+    _cartProvider = context.read<CartProvider>();
 
     initData();
   }
@@ -38,7 +41,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         filter: {'name': _searchController.text, 'includeAssets': true},
       );
 
-      print(data.items?[0].assets[0].base64Content);
+      //print(data.items?[0].assets[0].base64Content);
       setState(() {
         productResult = data;
         isLoading = false;
@@ -120,7 +123,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _cartProvider.addToCart(product);
+                        },
                         icon: Icon(Icons.add_shopping_cart),
                         style: IconButton.styleFrom(
                           iconSize: 18,

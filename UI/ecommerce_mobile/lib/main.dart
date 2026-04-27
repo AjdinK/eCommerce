@@ -1,5 +1,7 @@
 import 'package:ecommerce_mobile/layouts/container_screen.dart';
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
+import 'package:ecommerce_mobile/providers/cart_provider.dart';
+import 'package:ecommerce_mobile/providers/category_provider.dart';
 import 'package:ecommerce_mobile/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_)=> AuthProvider()),
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
+        ChangeNotifierProvider(create: (_)=> CartProvider()),
+        ChangeNotifierProvider(create: (_)=> CategoryProvider()),
       ],
       child: const MyApp()));
 }
