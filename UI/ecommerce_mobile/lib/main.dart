@@ -3,6 +3,7 @@ import 'package:ecommerce_mobile/providers/auth_provider.dart';
 import 'package:ecommerce_mobile/providers/cart_provider.dart';
 import 'package:ecommerce_mobile/providers/category_provider.dart';
 import 'package:ecommerce_mobile/providers/product_provider.dart';
+import 'package:ecommerce_mobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ void main() {
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
         ChangeNotifierProvider(create: (_)=> CartProvider()),
         ChangeNotifierProvider(create: (_)=> CategoryProvider()),
+        ChangeNotifierProvider(create: (_)=> UserProvider()),
       ],
       child: const MyApp()));
 }
@@ -21,7 +23,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

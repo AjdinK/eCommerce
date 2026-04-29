@@ -46,6 +46,12 @@ Image imageFromBase64String(String base64Image) {
   );
 }
 
+MemoryImage ImageFromBase64StringWithoutDimnesions(String base64Image) {
+  return MemoryImage(
+    base64Decode(base64Image),
+  );
+}
+
 Image placeholderImage() {
   return Image.asset(
     "assets/images/product_placeholder.jpg",

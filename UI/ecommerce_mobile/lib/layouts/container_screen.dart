@@ -2,6 +2,7 @@ import 'package:ecommerce_mobile/providers/cart_provider.dart';
 import 'package:ecommerce_mobile/screens/cart_list_screen.dart';
 import 'package:ecommerce_mobile/screens/category_list_screen.dart';
 import 'package:ecommerce_mobile/screens/product_list_screen.dart';
+import 'package:ecommerce_mobile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,16 +47,11 @@ class _ContainerScreenState extends State<ContainerScreen> {
     });
   }
 
-  static const TextStyle optionStyle = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.bold,
-  );
-
   List<Widget> get _widgetOptions => [
     ProductListScreen(),
     CategoryListScreen(),
     CartListScreen(onGoToHome: () => _onItemTapped(0)),
-    Center(child: Text('Index 3: Profile', style: optionStyle)),
+    ProfileScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -67,7 +63,7 @@ class _ContainerScreenState extends State<ContainerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isIndexStacked ? _widgetOptions.elementAt(_selectedIndex) : IndexedStack(index: _selectedIndex, children: _widgetOptions),
+      body: isIndexStacked ? IndexedStack(index: _selectedIndex, children: _widgetOptions) :  _widgetOptions.elementAt(_selectedIndex), 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[

@@ -172,5 +172,26 @@ namespace eCommerce.Services
 
             return response;
         }
+
+        public async Task ChangePasswordAsync(UserPasswordChangeRequest request)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == request.Id);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (!_cryptoService.Verify(user.PasswordHash, user.PasswordSalt, request.Password))
+                throw new Exception("Wrong credential");
+
+            if (!request.NewPassword.Equals(request.ConfirmNewPassword))
+                throw new Exception("Password confimation doen't match new password");
+
+            user.PasswordSalt = _cryptoService.GenerateSlat();
+            user.PasswordHash = _cryptoService.GenerateHash(request.NewPassword, user.PasswordSalt);
+
+
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

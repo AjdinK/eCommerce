@@ -22,5 +22,12 @@ public class UsersController : BaseCRUDController<UserResponse, UserSearch, User
     {
         return base.GetAll(search);
     }
-   
+
+    //[Authorization]
+    [HttpPut("ChangePassword")]
+    public async Task<IActionResult> ChangePassword([FromBody] UserPasswordChangeRequest request)
+    {
+        await _service.ChangePasswordAsync(request);
+        return Ok();
+    }
 }

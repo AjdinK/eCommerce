@@ -39,7 +39,9 @@ namespace eCommerce.Services.Database
         [Phone]
         [MaxLength(20)]
         public string? PhoneNumber { get; set; }
-        
+
+        public string? ProfileImageBase64 { get; set; }
+
         // Navigation property for the many-to-many relationship with Role
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 

@@ -8,12 +8,17 @@ import 'package:http/http.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
-  String _endpoint = "";
+  static String _endpoint = "";
+
+  static String? get baseUrl => _baseUrl;
+  static String? get endpoint => _endpoint;
 
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
-    _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://10.0.2.2:5126/");
+    _baseUrl = const String.fromEnvironment(
+      "baseUrl",
+      defaultValue: "http://10.0.2.2:5126/",
+    );
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -36,12 +41,29 @@ abstract class BaseProvider<T> with ChangeNotifier {
       result.totalCount = data['totalCount'];
       result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
 
-
       return result;
     } else {
       throw new Exception("Unknown error");
     }
     // print("response: ${response.request} ${response.statusCode}, ${response.body}");
+  }
+
+  Future getById(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    http.Response response = await http.get(uri, headers: headers);
+    print(
+      "response: ${response.request} ${response.statusCode}, ${response.body}",
+    );
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
   }
 
   Future<T> insert(dynamic request) async {
@@ -108,19 +130,21 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Map<String, String> createHeaders() {
     String accesstoken = AuthProvider.accesstoken ?? "";
 
-    String basicAuth =
-        "Bearer $accesstoken";
+    String basicAuth = "Bearer $accesstoken";
 
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": basicAuth
+      "Authorization": basicAuth,
     };
 
     return headers;
   }
 
-  String getQueryString(Map params,
-      {String prefix = '&', bool inRecursion = false}) {
+  String getQueryString(
+    Map params, {
+    String prefix = '&',
+    bool inRecursion = false,
+  }) {
     String query = '';
     params.forEach((key, value) {
       if (inRecursion) {
@@ -143,8 +167,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
       } else if (value is List || value is Map) {
         if (value is List) value = value.asMap();
         value.forEach((k, v) {
-          query +=
-              getQueryString({k: v}, prefix: '$prefix$key', inRecursion: true);
+          query += getQueryString(
+            {k: v},
+            prefix: '$prefix$key',
+            inRecursion: true,
+          );
         });
       }
     });

@@ -2,14 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool _isAuthenticated = false;
   static String? _accesstoken;
   String? _refreshtoken;
+  static Map<String, dynamic>? _accessTokenDecoded;
 
   static String? get accesstoken => _accesstoken;
   String? get refreshtoken => _refreshtoken;
+  static Map<String, dynamic>? get accessTokenDecoded => _accessTokenDecoded;
 
   String _baseUrl = "";
 
@@ -39,6 +42,8 @@ class AuthProvider extends ChangeNotifier {
       _accesstoken = data['accesstoken'];
       _refreshtoken = data['refreshtoken'];
       _isAuthenticated = true;
+      _accessTokenDecoded = JwtDecoder.decode(_accesstoken ?? "");
+      print(accessTokenDecoded);
       notifyListeners();
     } else {
       throw Exception("Unknown error");
