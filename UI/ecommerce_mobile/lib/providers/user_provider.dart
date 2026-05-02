@@ -15,7 +15,7 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> changePassword(dynamic object) async {
-    var url = "${BaseProvider.baseUrl}${BaseProvider.endpoint}/ChangePassword";
+    var url = "${BaseProvider.baseUrl}$endpoint/ChangePassword";
     
     var uri = Uri.parse(url);
 
@@ -24,9 +24,6 @@ class UserProvider extends BaseProvider<User> {
 
     http.Response response = await http.put(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
-    } else {
-      throw  Exception("Unknown error");
-    }
+    validateResponse(response);
   }
 }

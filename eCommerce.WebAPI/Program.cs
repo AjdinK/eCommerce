@@ -7,6 +7,7 @@ using eCommerce.Services.ProductStateMachine;
 using eCommerce.Services.QueryOptimization;
 using eCommerce.Services.Validators;
 using eCommerce.WebAPI.Filters;
+using eCommerce.WebAPI.Services;
 using eCommerce.WebAPI.Services.AccessManager;
 using FluentValidation;
 using Mapster;
@@ -21,6 +22,9 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuthenticatedUserAccessor, HttpAuthenticatedUserAccessor>();
 
 builder.Services.AddControllers(
    options => options.Filters.Add<ExceptionFilter>()
@@ -45,6 +49,12 @@ TypeAdapterConfig<UserUpdateRequest, User>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<ProductType, ProductTypeResponse>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<UnitOfMeasure, UnitOfMeasureResponse>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<Asset, AssetResponse>.NewConfig().IgnoreNullValues(true);
+TypeAdapterConfig<ProductReview, ProductReviewResponse>.NewConfig()
+    .Map(dest => dest.ReviewerDisplayName, src => $"{src.User.FirstName} {src.User.LastName}".Trim());
+TypeAdapterConfig<Order, OrderResponse>.NewConfig()
+    .Map(dest => dest.Status, src => (int)src.Status);
+TypeAdapterConfig<OrderItem, OrderItemResponse>.NewConfig()
+    .Map(dest => dest.ProductName, src => src.Product != null ? src.Product.Name : string.Empty);
 
 
 // register application services
@@ -74,6 +84,9 @@ builder.Services.AddScoped<ICryptoService, CryptoService>();
 
 builder.Services.AddScoped<IQueryOptimizationService, QueryOptimizationService> ();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductReviewService, ProductReviewService>();
+
 builder.Services.AddScoped<IValidator<ProductTypeInsertRequest>, ProductTypeInsertValidator>();
 builder.Services.AddScoped<IValidator<ProductTypeUpdateRequest>, ProductTypeUpdateValidator>();
 builder.Services.AddScoped<IValidator<UnitOfMeasureInsertRequest>, UnitOfMeasureInsertValidator>();
@@ -84,6 +97,8 @@ builder.Services.AddScoped<IValidator<UserInsertRequest>, UserInsertValidator>()
 builder.Services.AddScoped<IValidator<UserUpdateRequest>, UserUpdateValidator>();
 builder.Services.AddScoped<IValidator<AssetInsertRequest>, AssetInsertValidator>();
 builder.Services.AddScoped<IValidator<AssetUpdateRequest>, AssetUpdateValidator>();
+builder.Services.AddScoped<IValidator<ProductReviewInsertRequest>, ProductReviewInsertValidator>();
+builder.Services.AddScoped<IValidator<ProductReviewUpdateRequest>, ProductReviewUpdateValidator>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

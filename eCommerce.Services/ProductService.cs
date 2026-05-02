@@ -149,9 +149,23 @@ public class ProductService : BaseReadService<Product, ProductResponse, ProductS
 
     public override async Task<ProductResponse> GetByIdAsync(int id)
     {
-        var entity = await base.GetByIdAsync(id);
-        entity.AllowedActions = await GetAllowedActionsAsync(id);
+        var entity = await _dbContext.Products
+            .AsNoTracking()
+            .Include(p => p.Reviews.Where(r => r.IsApproved))
+            .ThenInclude(r => r.User)
+            .Include(p => p.ProductType)
+            .Include(p => p.UnitOfMeasure)
+            .Include(p => p.Assets)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-        return entity;
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Product with id {id} not found.");
+        }
+
+        var response = _mapper.Map<ProductResponse>(entity);
+        response.AllowedActions = await GetAllowedActionsAsync(id);
+
+        return response;
     }
 }

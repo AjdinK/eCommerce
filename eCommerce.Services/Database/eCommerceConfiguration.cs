@@ -45,6 +45,12 @@ namespace eCommerce.Services.Database
                .HasForeignKey(a => a.ProductId)
                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ProductReview>()
+                .HasOne(pr => pr.Order)
+                .WithMany(o => o.ProductReviews)
+                .HasForeignKey(pr => pr.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Add any additional model configurations here
         }
     }

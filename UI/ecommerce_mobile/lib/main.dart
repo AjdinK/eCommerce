@@ -2,7 +2,9 @@ import 'package:ecommerce_mobile/layouts/container_screen.dart';
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
 import 'package:ecommerce_mobile/providers/cart_provider.dart';
 import 'package:ecommerce_mobile/providers/category_provider.dart';
+import 'package:ecommerce_mobile/providers/order_provider.dart';
 import 'package:ecommerce_mobile/providers/product_provider.dart';
+import 'package:ecommerce_mobile/providers/product_review_provider.dart';
 import 'package:ecommerce_mobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,8 @@ void main() {
         ChangeNotifierProvider(create: (_)=> CartProvider()),
         ChangeNotifierProvider(create: (_)=> CategoryProvider()),
         ChangeNotifierProvider(create: (_)=> UserProvider()),
+        ChangeNotifierProvider(create: (_)=> OrderProvider()),
+        ChangeNotifierProvider(create: (_)=> ProductReviewProvider()),
       ],
       child: const MyApp()));
 }
@@ -44,7 +48,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.blue, primary: Colors.red),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          primary: Colors.red,
+        ),
       ),
       home: LoginPage(),
     );
@@ -258,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('You have pushed the button this many times:'),
             Text(

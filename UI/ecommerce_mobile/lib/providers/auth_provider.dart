@@ -67,6 +67,7 @@ class AuthProvider extends ChangeNotifier {
     _isAuthenticated = false;
     _accesstoken = null;
     _refreshtoken = null;
+    _accessTokenDecoded = null;
     notifyListeners();
   }
 

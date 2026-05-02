@@ -1,5 +1,6 @@
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
 import 'package:ecommerce_mobile/screens/change_password_screen.dart';
+import 'package:ecommerce_mobile/screens/orders_list_screen.dart';
 import 'package:ecommerce_mobile/screens/profile_settings_screen.dart';
 import 'package:ecommerce_mobile/utils/utils_widgets.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: Icon(Icons.shopping_bag),
               title: Text("Your orders"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OrdersListScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.pending),
@@ -133,6 +142,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (context) => ChangePasswordScreen(),
                   ),
                 );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("Log out"),
+              onTap: () async {
+                final leave = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text("Log out"),
+                    content: Text("Are you sure you want to log out?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: Text("Log out"),
+                      ),
+                    ],
+                  ),
+                );
+                if (leave != true || !mounted) return;
+                context.read<AuthProvider>().logout();
+                if (!mounted) return;
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           ],

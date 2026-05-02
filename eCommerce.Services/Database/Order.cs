@@ -31,6 +31,8 @@ namespace eCommerce.Services.Database
         
         // Navigation property for OrderItems
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        public ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
         
         // Shipping details
         [MaxLength(200)]

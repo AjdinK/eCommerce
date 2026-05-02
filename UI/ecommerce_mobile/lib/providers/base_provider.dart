@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce_mobile/models/search_result.dart';
+import 'package:ecommerce_mobile/utils/api_client_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
@@ -8,21 +9,21 @@ import 'package:http/http.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
-  static String _endpoint = "";
 
   static String? get baseUrl => _baseUrl;
-  static String? get endpoint => _endpoint;
 
-  BaseProvider(String endpoint) {
-    _endpoint = endpoint;
-    _baseUrl = const String.fromEnvironment(
+  /// API resource segment, e.g. `Products` → `{baseUrl}Products`.
+  final String endpoint;
+
+  BaseProvider(this.endpoint) {
+    _baseUrl ??= const String.fromEnvironment(
       "baseUrl",
       defaultValue: "http://10.0.2.2:5126/",
     );
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
-    var url = "$_baseUrl$_endpoint";
+    var url = "$_baseUrl$endpoint";
     if (filter != null) {
       var queryString = getQueryString(filter);
       url = "$url?$queryString";
@@ -33,23 +34,19 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var response = await http.get(uri, headers: headers);
 
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
+    validateResponse(response);
+    var data = jsonDecode(response.body);
 
-      var result = SearchResult<T>();
+    var result = SearchResult<T>();
 
-      result.totalCount = data['totalCount'];
-      result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
+    result.totalCount = data['totalCount'];
+    result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
 
-      return result;
-    } else {
-      throw new Exception("Unknown error");
-    }
-    // print("response: ${response.request} ${response.statusCode}, ${response.body}");
+    return result;
   }
 
-  Future getById(int id) async {
-    var url = "$_baseUrl$_endpoint/$id";
+  Future<T> getById(int id) async {
+    var url = "$_baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -57,74 +54,74 @@ abstract class BaseProvider<T> with ChangeNotifier {
     print(
       "response: ${response.request} ${response.statusCode}, ${response.body}",
     );
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
+    validateResponse(response);
+    var data = jsonDecode(response.body);
 
-      return fromJson(data);
-    } else {
-      throw Exception("Unknown error");
-    }
+    return fromJson(data);
   }
 
   Future<T> insert(dynamic request) async {
-    var url = "$_baseUrl$_endpoint";
+    var url = "$_baseUrl$endpoint";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      return fromJson(data);
-    } else {
-      throw new Exception("Unknown error");
-    }
+    validateResponse(response);
+    var data = jsonDecode(response.body);
+    return fromJson(data);
   }
 
   Future<T> update(int id, [dynamic request]) async {
-    var url = "$_baseUrl$_endpoint/$id";
+    var url = "$_baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var jsonRequest = jsonEncode(request);
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      return fromJson(data);
-    } else {
-      throw new Exception("Unknown error");
-    }
+    validateResponse(response);
+    var data = jsonDecode(response.body);
+    return fromJson(data);
   }
 
   Future remove(int id) async {
-    var url = "$_baseUrl$_endpoint/$id";
+    var url = "$_baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var response = await http.delete(uri, headers: headers);
 
-    if (isValidResponse(response)) {
-      return;
-    } else {
-      throw new Exception("Unknown error");
-    }
+    validateResponse(response);
   }
 
-  T fromJson(data) {
+  T fromJson(dynamic data) {
     throw Exception("Method not implemented");
   }
 
-  bool isValidResponse(Response response) {
+  /// Throws [ApiClientException] with a message from the API when status is not successful.
+  void validateResponse(Response response) {
     if (response.statusCode < 299) {
-      return true;
-    } else if (response.statusCode == 401) {
-      throw new Exception("Unauthorized");
-    } else {
-      print(response.body);
-      throw new Exception("Something bad happened please try again");
+      return;
     }
+    if (response.statusCode == 401) {
+      throw ApiClientException(
+        'Your session has expired. Please sign in again.',
+      );
+    }
+
+    final parsed = ApiErrorParser.messageFromBody(response.body);
+    if (response.statusCode >= 500) {
+      throw ApiClientException(
+        parsed ?? 'Server error. Please try again later.',
+      );
+    }
+
+    // 400 Bad Request — business rules (ClinetException), validation, etc.
+    throw ApiClientException(
+      parsed ?? 'Request could not be completed. Please try again.',
+    );
   }
 
   Map<String, String> createHeaders() {

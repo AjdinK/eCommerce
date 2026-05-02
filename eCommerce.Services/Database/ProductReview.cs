@@ -29,6 +29,12 @@ namespace eCommerce.Services.Database
         
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!;
+
+        /// <summary>Optional link to the order that contained this product (used to verify purchase).</summary>
+        public int? OrderId { get; set; }
+
+        [ForeignKey("OrderId")]
+        public Order? Order { get; set; }
         
         // Whether the review is approved/visible
         public bool IsApproved { get; set; } = false;
