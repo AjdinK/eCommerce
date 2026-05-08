@@ -438,6 +438,266 @@ namespace eCommerce.Services.Migrations
                             SKU = "MON-700",
                             StockQuantity = 30,
                             Weight = 4500m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Portable 1TB external SSD with high-speed USB-C connectivity",
+                            IsActive = true,
+                            Name = "External SSD 1TB",
+                            Price = 129.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "SSD-800",
+                            StockQuantity = 60,
+                            Weight = 80m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Full HD webcam with built-in microphone and privacy shutter",
+                            IsActive = true,
+                            Name = "Webcam Pro 1080p",
+                            Price = 59.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "CAM-900",
+                            StockQuantity = 90,
+                            Weight = 140m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Compact Bluetooth speaker with waterproof design and deep bass",
+                            IsActive = true,
+                            Name = "Bluetooth Speaker",
+                            Price = 49.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "SPK-1000",
+                            StockQuantity = 110,
+                            Weight = 620m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Fitness-focused smartwatch with heart-rate tracking and GPS",
+                            IsActive = true,
+                            Name = "Smartwatch Active",
+                            Price = 149.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "WCH-1100",
+                            StockQuantity = 55,
+                            Weight = 50m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Adjustable aluminum laptop stand for improved desk ergonomics",
+                            IsActive = true,
+                            Name = "Laptop Stand Aluminum",
+                            Price = 39.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "STD-1200",
+                            StockQuantity = 85,
+                            Weight = 750m
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Dual-band Wi-Fi 6 router with extended coverage for home networks",
+                            IsActive = true,
+                            Name = "Wi-Fi 6 Router",
+                            Price = 119.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "RTR-1300",
+                            StockQuantity = 45,
+                            Weight = 680m
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Digital drawing tablet with pressure-sensitive stylus",
+                            IsActive = true,
+                            Name = "Graphics Tablet",
+                            Price = 79.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "TAB-1400",
+                            StockQuantity = 35,
+                            Weight = 420m
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "20000mAh portable power bank with dual USB output",
+                            IsActive = true,
+                            Name = "Portable Power Bank",
+                            Price = 34.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "PWR-1500",
+                            StockQuantity = 130,
+                            Weight = 410m
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Cat 6 Ethernet cable for reliable high-speed wired networking",
+                            IsActive = true,
+                            Name = "Ethernet Cable 10m",
+                            Price = 12.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "NET-1600",
+                            StockQuantity = 300,
+                            Weight = 260m
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "USB-C docking station with HDMI, Ethernet, USB-A, and card reader ports",
+                            IsActive = true,
+                            Name = "Docking Station",
+                            Price = 99.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "DOC-1700",
+                            StockQuantity = 50,
+                            Weight = 520m
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Adjustable LED desk lamp with touch controls and multiple brightness levels",
+                            IsActive = true,
+                            Name = "Smart LED Desk Lamp",
+                            Price = 44.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "LMP-1800",
+                            StockQuantity = 70,
+                            Weight = 850m
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Compact 4K action camera with waterproof casing and image stabilization",
+                            IsActive = true,
+                            Name = "Action Camera",
+                            Price = 179.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "ACT-1900",
+                            StockQuantity = 28,
+                            Weight = 160m
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Standalone virtual reality headset with motion controllers",
+                            IsActive = true,
+                            Name = "VR Headset",
+                            Price = 299.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "VRH-2000",
+                            StockQuantity = 20,
+                            Weight = 620m
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Central smart home hub for connecting lights, sensors, and voice assistants",
+                            IsActive = true,
+                            Name = "Smart Home Hub",
+                            Price = 84.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "HUB-2100",
+                            StockQuantity = 42,
+                            Weight = 300m
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Lightweight fitness tracker with step counting, sleep monitoring, and notifications",
+                            IsActive = true,
+                            Name = "Fitness Tracker Band",
+                            Price = 69.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "FIT-2200",
+                            StockQuantity = 95,
+                            Weight = 35m
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Slim wireless charging pad compatible with Qi-enabled smartphones and earbuds",
+                            IsActive = true,
+                            Name = "Wireless Charging Pad",
+                            Price = 24.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "WCP-2300",
+                            StockQuantity = 160,
+                            Weight = 110m
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Two-bay network attached storage enclosure for backups and media sharing",
+                            IsActive = true,
+                            Name = "NAS Storage Enclosure",
+                            Price = 229.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "NAS-2400",
+                            StockQuantity = 18,
+                            Weight = 1300m
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Portable digital voice recorder with noise reduction and long recording time",
+                            IsActive = true,
+                            Name = "Digital Voice Recorder",
+                            Price = 54.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "REC-2500",
+                            StockQuantity = 65,
+                            Weight = 90m
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Portable mini projector with HDMI input and built-in speaker",
+                            IsActive = true,
+                            Name = "Mini Projector",
+                            Price = 159.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "PRJ-2600",
+                            StockQuantity = 32,
+                            Weight = 950m
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Wi-Fi smart doorbell camera with motion detection and two-way audio",
+                            IsActive = true,
+                            Name = "Smart Doorbell Camera",
+                            Price = 139.99m,
+                            ProductState = "DraftProductState",
+                            SKU = "DRB-2700",
+                            StockQuantity = 38,
+                            Weight = 250m
                         });
                 });
 

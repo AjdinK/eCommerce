@@ -9,4 +9,5 @@ public class ProductReviewResponse
     public int UserId { get; set; }
     public string ReviewerDisplayName { get; set; } = string.Empty;
     public int? OrderId { get; set; }
+    public int? ProductId { get; set; }
 }

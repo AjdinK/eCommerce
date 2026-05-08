@@ -2,6 +2,7 @@ import 'package:ecommerce_mobile/providers/auth_provider.dart';
 import 'package:ecommerce_mobile/screens/change_password_screen.dart';
 import 'package:ecommerce_mobile/screens/orders_list_screen.dart';
 import 'package:ecommerce_mobile/screens/profile_settings_screen.dart';
+import 'package:ecommerce_mobile/screens/user_review_screen.dart';
 import 'package:ecommerce_mobile/utils/utils_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -112,6 +113,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const OrdersListScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.reviews),
+              title: Text("Your reviews"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserReviewScreen(),
                   ),
                 );
               },

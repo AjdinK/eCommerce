@@ -76,6 +76,11 @@ public class ProductReviewService
             query = query.Where(r => r.OrderId == search.OrderId.Value);
         }
 
+        if (search?.Rating.HasValue == true)
+        {
+            query = query.Where(r => r.Rating == search.Rating.Value);
+        }
+
         return query;
     }
 
