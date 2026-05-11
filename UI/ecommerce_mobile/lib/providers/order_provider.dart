@@ -10,10 +10,10 @@ class OrderProvider extends BaseProvider<Order> {
   @override
   Order fromJson(data) => Order.fromJson(data as Map<String, dynamic>);
 
-  Future<Order> checkout(List<Map<String, dynamic>> items) async {
+  Future<Order> checkout(List<Map<String, dynamic>> items, {String? paymentIntentId}) async {
     final uri = Uri.parse('${BaseProvider.baseUrl}Orders/Checkout');
     final headers = createHeaders();
-    final body = jsonEncode({'items': items});
+    final body = jsonEncode({'items': items, 'paymentIntentId': paymentIntentId});
     final response = await http.post(uri, headers: headers, body: body);
     validateResponse(response);
     return Order.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -23,4 +23,18 @@ class OrderProvider extends BaseProvider<Order> {
     final result = await get(filter: {'page': 1, 'pageSize': 100});
     return result.items ?? [];
   }
+
+  Future<Map<String, String>> createPaymentIntent(List<Map<String, dynamic>> items) async {
+    final uri = Uri.parse('${BaseProvider.baseUrl}Orders/CreatePaymentIntent');
+    final headers = createHeaders();
+    final body = jsonEncode({'items': items});
+    final response = await http.post(uri, headers: headers, body: body);
+    validateResponse(response);
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    return {
+      'clientSecret': data['clientSecret'] as String,
+      'publishableKey': data['publishableKey'] as String,
+    };
+  }
+
 }

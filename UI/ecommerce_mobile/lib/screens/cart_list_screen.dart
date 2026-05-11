@@ -6,6 +6,8 @@ import 'package:ecommerce_mobile/utils/api_client_exception.dart';
 import 'package:ecommerce_mobile/utils/utils_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 
 class CartListScreen extends StatefulWidget {
   final VoidCallback? onGoToHome;
@@ -63,7 +65,24 @@ class _CartListScreenState extends State<CartListScreen> {
             },
           )
           .toList();
-      final order = await context.read<OrderProvider>().checkout(payload);
+      
+      final orderProvider = context.read<OrderProvider>();
+      final intentData = await orderProvider.createPaymentIntent(payload);
+
+      Stripe.publishableKey = intentData['publishableKey']!;
+
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: intentData['clientSecret']!,
+          merchantDisplayName: 'eCommerce Shop',
+        ),
+      );
+
+      await Stripe.instance.presentPaymentSheet();
+
+      final paymentIntentId = intentData['clientSecret']!.split('_secret_').first;
+      final order = await orderProvider.checkout(payload, paymentIntentId: paymentIntentId);
+      //final order = await context.read<OrderProvider>().checkout(payload);
 
       _cartProvider.clearCart();
 
@@ -74,6 +93,13 @@ class _CartListScreenState extends State<CartListScreen> {
           builder: (context) => OrderDetailScreen(orderId: order.id),
         ),
       );
+      
+    } on StripeException catch (e) {
+      if (mounted) {
+        print(e);
+        final msg = e.error.localizedMessage ?? e.error.message ?? 'Payment cancelled.';
+        alertBox(context, 'Payment', msg);
+      }
     } on ApiClientException catch (e) {
       if (mounted) {
         alertBox(context, 'Order could not be placed', e.message);

@@ -51,7 +51,7 @@ namespace eCommerce.Services.Database
         public string ShippingCountry { get; set; } = string.Empty;
         
         // Payment information
-        [MaxLength(20)]
+        [MaxLength(100)]
         public string? PaymentTransactionId { get; set; }
         
         public DateTime? PaymentDate { get; set; }

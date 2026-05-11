@@ -5,17 +5,21 @@ using eCommerce.Model.SearchObjects;
 using eCommerce.Services.Database;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Stripe;
 
 namespace eCommerce.Services;
 
 public class OrderService : BaseReadService<Order, OrderResponse, OrderSearchObject>, IOrderService
 {
     private readonly IAuthenticatedUserAccessor _userAccessor;
+    private readonly IConfiguration _configuration;
 
-    public OrderService(ECommerceDbContext dbContext, IMapper mapper, IAuthenticatedUserAccessor userAccessor)
+    public OrderService(ECommerceDbContext dbContext, IMapper mapper, IAuthenticatedUserAccessor userAccessor, IConfiguration configuration)
         : base(mapper, dbContext)
     {
         _userAccessor = userAccessor;
+        _configuration = configuration;
     }
 
     public override async Task<PageResult<OrderResponse>> GetAllAsync(OrderSearchObject? search = null)
@@ -108,6 +112,8 @@ public class OrderService : BaseReadService<Order, OrderResponse, OrderSearchObj
                 ShippingState = OrDash(request.ShippingState),
                 ShippingZipCode = OrDash(request.ShippingZipCode),
                 ShippingCountry = OrDash(request.ShippingCountry),
+                PaymentTransactionId = request.PaymentIntentId,
+                PaymentDate = request.PaymentIntentId != null ? DateTime.UtcNow : (DateTime?)null
             };
 
             foreach (var line in merged)
@@ -156,4 +162,53 @@ public class OrderService : BaseReadService<Order, OrderResponse, OrderSearchObj
 
     private static string OrDash(string? value) =>
         string.IsNullOrWhiteSpace(value) ? "—" : value.Trim();
+
+    public async Task<PaymentIntentResponse> CreatePaymentIntentAsync(CreatePaymentIntentRequest request)
+    {
+        if(request.Items == null || request.Items.Count == 0)
+        {
+            throw new ClinetException("Cart is empty.");
+        }
+
+        var merged = request.Items
+            .Where(i => i.Quantity > 0)
+            .GroupBy(i => i.ProductId)
+            .Select(g => new { ProductId = g.Key, Quantity = g.Sum(x => x.Quantity) })
+            .ToList();
+
+        decimal total = 0;
+        foreach (var line in merged)
+        {
+            var product = _dbContext.Products.Find(line.ProductId);
+            if (product == null) {
+                throw new ClinetException($"Product {line.ProductId} was not found."); 
+            }
+
+            total += product.Price * line.Quantity;
+        }
+
+        var secretKey = _configuration["Stripe:SecretKey"] 
+                        ?? throw new InvalidOperationException("Stripe secret key is not configured.");
+
+        StripeConfiguration.ApiKey = secretKey;
+        var options = new PaymentIntentCreateOptions
+        {
+            Amount = (long)(total * 100), // Convert to cents
+            Currency = "usd",
+            AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+            {
+                Enabled = true,
+            },
+        };
+
+        var service = new PaymentIntentService();
+        var intent = await service.CreateAsync(options);
+
+        return new PaymentIntentResponse
+        {
+            ClientSecret = intent.ClientSecret,
+            PublishableKey = _configuration["Stripe:PublishableKey"] 
+                             ?? throw new InvalidOperationException("Stripe publishable key is not configured.")
+        };
+    }
 }

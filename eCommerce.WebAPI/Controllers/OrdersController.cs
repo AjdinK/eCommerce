@@ -23,4 +23,12 @@ public class OrdersController : BaseReadController<OrderResponse, OrderSearchObj
         var result = await _service.CheckoutAsync(request);
         return Ok(result);
     }
+
+    [HttpPost("CreatePaymentIntent")]
+    public async Task<ActionResult<PaymentIntentResponse>> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
+    {
+        var result = await _service.CreatePaymentIntentAsync(request);
+        return Ok(result);
+    }
 }
+//owasp top 10.
