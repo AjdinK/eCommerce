@@ -83,7 +83,7 @@ namespace eCommerce.Services
 
             this._dbContext.Set<TEntity>().Add(entity);
             await this._dbContext.SaveChangesAsync();
-            
+
             return await Task.FromResult(_mapper.Map<TResponse>(entity));
         }
 
@@ -99,7 +99,7 @@ namespace eCommerce.Services
                 throw new FluentValidation.ValidationException(errors);
             }
 
-           
+
             var entity = this._dbContext.Set<TEntity>().Find(id);
 
             if (entity == null)
