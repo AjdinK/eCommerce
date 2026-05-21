@@ -1,4 +1,5 @@
 import 'package:ecommerce_desktop/providers/auth_provider.dart';
+import 'package:ecommerce_desktop/providers/cupon_provider.dart';
 import 'package:ecommerce_desktop/providers/product_provider.dart';
 import 'package:ecommerce_desktop/providers/product_review_provider.dart';
 import 'package:ecommerce_desktop/providers/product_type_provider.dart';
@@ -24,6 +25,7 @@ void main() {
         ChangeNotifierProvider(create: (_)=> CategoryProvider()),
         ChangeNotifierProvider(create: (_)=> UserProvider()),
         ChangeNotifierProvider(create: (_)=> ProductReviewProvider()),
+        ChangeNotifierProvider(create: (_)=> CuponProvider()),
       ],
       child: const MyApp()));
 }

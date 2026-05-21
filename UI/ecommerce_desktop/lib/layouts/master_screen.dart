@@ -1,3 +1,4 @@
+import 'package:ecommerce_desktop/screens/cupon_list_screen.dart';
 import 'package:ecommerce_desktop/screens/product_details_screen.dart';
 import 'package:ecommerce_desktop/screens/product_list.dart';
 import 'package:ecommerce_desktop/screens/review_list.dart';
@@ -81,6 +82,14 @@ class _MasterScreenState extends State<MasterScreen> {
               onTap: () {
                 // Handle Cart navigation
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> ReviewList()));
+              },
+            ),
+             ListTile(
+              leading: Icon(Icons.card_giftcard),
+              title: Text('Cupons'),
+              onTap: () {
+                // Handle Cart navigation
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CuponList()));
               },
             ),
             ListTile(

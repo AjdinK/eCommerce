@@ -2,6 +2,24 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+String getShortMonthName(DateTime date) {
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  return months[date.month - 1];
+}
 void alertBox(BuildContext context, String title, String content) {
      showDialog(
       context: context,

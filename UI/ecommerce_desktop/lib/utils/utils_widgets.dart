@@ -2,6 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+dynamic dateEncode(dynamic item) {
+  if (item is DateTime) {
+    return item.toIso8601String();
+  }
+  return item;
+}
+
 void alertBox(BuildContext context, String title, String content) {
      showDialog(
       context: context,

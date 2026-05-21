@@ -10,21 +10,35 @@ class OrderProvider extends BaseProvider<Order> {
   @override
   Order fromJson(data) => Order.fromJson(data as Map<String, dynamic>);
 
-  Future<Order> checkout(List<Map<String, dynamic>> items, {String? paymentIntentId}) async {
+  Future<Order> checkout(
+    List<Map<String, dynamic>> items, {
+    String? paymentIntentId,
+  }) async {
     final uri = Uri.parse('${BaseProvider.baseUrl}Orders/Checkout');
     final headers = createHeaders();
-    final body = jsonEncode({'items': items, 'paymentIntentId': paymentIntentId});
+    final body = jsonEncode({
+      'items': items,
+      'paymentIntentId': paymentIntentId,
+    });
     final response = await http.post(uri, headers: headers, body: body);
     validateResponse(response);
     return Order.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
-  Future<List<Order>> fetchMyOrders() async {
-    final result = await get(filter: {'page': 1, 'pageSize': 100});
+  Future<List<Order>> fetchMyOrders({int? status}) async {
+    var filter = {'page': 1, 'pageSize': 100};
+
+    if (status != null) {
+      filter['status'] = status;
+    }
+
+    final result = await get(filter: filter);
     return result.items ?? [];
   }
 
-  Future<Map<String, String>> createPaymentIntent(List<Map<String, dynamic>> items) async {
+  Future<Map<String, String>> createPaymentIntent(
+    List<Map<String, dynamic>> items,
+  ) async {
     final uri = Uri.parse('${BaseProvider.baseUrl}Orders/CreatePaymentIntent');
     final headers = createHeaders();
     final body = jsonEncode({'items': items});
@@ -36,5 +50,4 @@ class OrderProvider extends BaseProvider<Order> {
       'publishableKey': data['publishableKey'] as String,
     };
   }
-
 }

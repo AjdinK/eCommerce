@@ -51,9 +51,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     http.Response response = await http.get(uri, headers: headers);
-    print(
-      "response: ${response.request} ${response.statusCode}, ${response.body}",
-    );
+    
     validateResponse(response);
     var data = jsonDecode(response.body);
 

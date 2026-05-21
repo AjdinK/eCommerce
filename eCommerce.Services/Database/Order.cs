@@ -28,7 +28,12 @@ namespace eCommerce.Services.Database
         
         [ForeignKey("UserId")]
         public User User { get; set; } = null!;
-        
+
+        public int? CuponId { get; set; }
+
+        [ForeignKey("CuponId")]
+        public Cupon? Cupon { get; set; } = null!;
+
         // Navigation property for OrderItems
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

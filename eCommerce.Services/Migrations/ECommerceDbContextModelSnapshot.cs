@@ -189,6 +189,79 @@ namespace eCommerce.Services.Migrations
                         });
                 });
 
+            modelBuilder.Entity("eCommerce.Services.Database.Cupon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("DiscountAmount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("DiscountType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Uses")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cupons");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "WELCOME10",
+                            CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountAmount = 10.0,
+                            DiscountType = 0,
+                            ExpiresAt = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Uses = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "SPRING15",
+                            CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountAmount = 15.0,
+                            DiscountType = 0,
+                            ExpiresAt = new DateTime(2026, 6, 30, 23, 59, 59, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Uses = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "SAVE20",
+                            CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountAmount = 20.0,
+                            DiscountType = 1,
+                            ExpiresAt = new DateTime(2026, 11, 30, 23, 59, 59, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Uses = 0
+                        });
+                });
+
             modelBuilder.Entity("eCommerce.Services.Database.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -196,6 +269,9 @@ namespace eCommerce.Services.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CuponId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -212,8 +288,8 @@ namespace eCommerce.Services.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentTransactionId")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ShippingAddress")
                         .IsRequired()
@@ -250,6 +326,8 @@ namespace eCommerce.Services.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CuponId");
 
                     b.HasIndex("UserId");
 
@@ -1242,11 +1320,18 @@ namespace eCommerce.Services.Migrations
 
             modelBuilder.Entity("eCommerce.Services.Database.Order", b =>
                 {
+                    b.HasOne("eCommerce.Services.Database.Cupon", "Cupon")
+                        .WithMany("Orders")
+                        .HasForeignKey("CuponId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("eCommerce.Services.Database.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Cupon");
 
                     b.Navigation("User");
                 });
@@ -1370,6 +1455,11 @@ namespace eCommerce.Services.Migrations
                     b.Navigation("ChildCategories");
 
                     b.Navigation("ProductCategories");
+                });
+
+            modelBuilder.Entity("eCommerce.Services.Database.Cupon", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("eCommerce.Services.Database.Order", b =>

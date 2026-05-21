@@ -1,3 +1,4 @@
+using eCommerce.Model.Enums;
 using eCommerce.Services.ProductStateMachine;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,49 @@ namespace eCommerce.Services.Database
             SeedRoles(modelBuilder);
             SeedUsers(modelBuilder);
             SeedUserRoles(modelBuilder);
+            SeedCupons(modelBuilder);
+        }
+
+        private void SeedCupons(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Cupon>().HasData(
+                new
+                {
+                    Id = 1,
+                    Code = "WELCOME10",
+                    DiscountAmount = 10.0,
+                    DiscountType = DiscountType.Percentage,
+                    Uses = 0,
+                    ExpiresAt = new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc),
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                },
+                new
+                {
+                    Id = 2,
+                    Code = "SPRING15",
+                    DiscountAmount = 15.0,
+                    DiscountType = DiscountType.Percentage,
+                    Uses = 0,
+                    ExpiresAt = new DateTime(2026, 6, 30, 23, 59, 59, DateTimeKind.Utc),
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                },
+                new
+                {
+                    Id = 3,
+                    Code = "SAVE20",
+                    DiscountAmount = 20.0,
+                    DiscountType = DiscountType.FixedAmount,
+                    Uses = 0,
+                    ExpiresAt = new DateTime(2026, 11, 30, 23, 59, 59, DateTimeKind.Utc),
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 5, 16, 0, 0, 0, DateTimeKind.Utc),
+                    UpdatedAt = (DateTime?)null
+                }
+            );
         }
 
         private void SeedProductTypes(ModelBuilder modelBuilder)

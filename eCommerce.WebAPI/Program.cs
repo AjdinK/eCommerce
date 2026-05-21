@@ -49,6 +49,7 @@ TypeAdapterConfig<UserUpdateRequest, User>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<ProductType, ProductTypeResponse>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<UnitOfMeasure, UnitOfMeasureResponse>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<Asset, AssetResponse>.NewConfig().IgnoreNullValues(true);
+TypeAdapterConfig<Cupon, CuponResponse>.NewConfig().IgnoreNullValues(true);
 TypeAdapterConfig<ProductReview, ProductReviewResponse>.NewConfig()
     .Map(dest => dest.ReviewerDisplayName, src => $"{src.User.FirstName} {src.User.LastName}".Trim());
 TypeAdapterConfig<Order, OrderResponse>.NewConfig()
@@ -66,6 +67,8 @@ builder.Services.AddScoped<ActiveProductState>();
 
 // category service
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+// cupon service
+builder.Services.AddScoped<ICuponService, CuponService>();
 // product type service
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 // unit of measure service
@@ -99,6 +102,8 @@ builder.Services.AddScoped<IValidator<AssetInsertRequest>, AssetInsertValidator>
 builder.Services.AddScoped<IValidator<AssetUpdateRequest>, AssetUpdateValidator>();
 builder.Services.AddScoped<IValidator<ProductReviewInsertRequest>, ProductReviewInsertValidator>();
 builder.Services.AddScoped<IValidator<ProductReviewUpdateRequest>, ProductReviewUpdateValidator>();
+builder.Services.AddScoped<IValidator<CuponInsertRequest>, CuponInsertValidator>();
+builder.Services.AddScoped<IValidator<CuponUpdateRequest>, CuponUpdateValidator>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
