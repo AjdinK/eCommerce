@@ -13,6 +13,42 @@ services:
       - "1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
+    networks:
+      - ecomm-2026
+  ecomm-fit-2026-api:
+    build:
+      context: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=ecomm-fit-2026;Database=eCommerce;User Id=sa;Password=qweasd123!;TrustServerCertificate=True;
+      - RabbitMQ__ConnectionString=host=ecomm-fit-2026-rabbitmq;username=admin;password=admin
+    ports:
+      - "5121:5121"
+    expose:
+       - "5121"
+    depends_on:
+      - ecomm-fit-2026
+    networks:
+      - ecomm-2026
+  ecomm-fit-2026-rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672"       # AMQP — .NET clients connect here
+      - "15672:15672"     # Management UI — http://localhost:15672
+    expose:
+      - 5672
+    networks:
+      - ecomm-2026
+
+
 
 volumes:
   sqlserver_data:
+
+networks:
+  ecomm-2026:
+    driver: bridge

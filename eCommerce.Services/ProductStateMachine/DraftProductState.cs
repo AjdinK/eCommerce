@@ -3,6 +3,9 @@ using eCommerce.Model.Responses;
 using eCommerce.Services.Database;
 using Humanizer;
 using MapsterMapper;
+using EasyNetQ;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eCommerce.Services.ProductStateMachine
 {   
@@ -14,6 +17,7 @@ namespace eCommerce.Services.ProductStateMachine
         }
         public override async Task<ProductResponse> UpdateAsync(int id, ProductUpdateRequest request)
         {
+
             var entity = await DbContext.Products.FindAsync(id);
             if (entity == null)
             {
@@ -24,7 +28,17 @@ namespace eCommerce.Services.ProductStateMachine
             //todo: add validations ...
             DbContext.SaveChanges();
 
+            var config = ServiceProvider.GetRequiredService<IConfiguration>();
+            var bus = RabbitHutch.CreateBus(config["RabbitMQ:ConnectionString"]);
+
             var response = Mapper.Map<ProductResponse>(entity);
+
+            await bus.PubSub.PublishAsync(new Model.Messages.ProductUpdated
+            {
+                Id = id,
+                Data = response
+            });
+
             return response;
         }
 
