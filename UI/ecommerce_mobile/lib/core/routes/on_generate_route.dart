@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../models/order.dart';
 import '../../models/product.dart';
+import '../../models/user.dart';
 import '../../views/auth/forget_password_page.dart';
 import '../../views/auth/intro_login_page.dart';
 import '../../views/auth/login_or_signup_page.dart';
@@ -141,8 +142,8 @@ class RouteGenerator {
 
         return CupertinoPageRoute(
           builder: (_) => OrderDetailsPage(order: order),
-      );
-      
+        );
+
       case AppRoutes.coupon:
         return CupertinoPageRoute(builder: (_) => const CouponAndOffersPage());
 
@@ -150,7 +151,8 @@ class RouteGenerator {
         return CupertinoPageRoute(builder: (_) => const CouponDetailsPage());
 
       case AppRoutes.profileEdit:
-        return CupertinoPageRoute(builder: (_) => const ProfileEditPage());
+        final user = settings.arguments as User;
+        return CupertinoPageRoute(builder: (_) => ProfileEditPage(user: user));
 
       case AppRoutes.newAddress:
         return CupertinoPageRoute(builder: (_) => const NewAddressPage());

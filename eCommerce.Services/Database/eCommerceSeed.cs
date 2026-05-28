@@ -761,6 +761,48 @@ namespace eCommerce.Services.Database
                     CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
                     LastLoginAt = (DateTime?)null,
                     PhoneNumber = (string?)null
+                },
+                new
+                {
+                    Id = 6,
+                    FirstName = "Frank",
+                    LastName = "Customer",
+                    Email = "customer3@gmail.com",
+                    Username = "customer3",
+                    PasswordHash = "Ov4LxpWKXXV9dwMYvBgqODdzIt0=", // Test123
+                    PasswordSalt = "KtWF6g7SemBqs4nVWV4Ziw==",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    LastLoginAt = (DateTime?)null,
+                    PhoneNumber = (string?)null
+                },
+                new
+                {
+                    Id = 7,
+                    FirstName = "Grace",
+                    LastName = "Customer",
+                    Email = "customer4@gmail.com",
+                    Username = "customer4",
+                    PasswordHash = "Ov4LxpWKXXV9dwMYvBgqODdzIt0=", // Test123
+                    PasswordSalt = "KtWF6g7SemBqs4nVWV4Ziw==",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    LastLoginAt = (DateTime?)null,
+                    PhoneNumber = (string?)null
+                },
+                new
+                {
+                    Id = 8,
+                    FirstName = "Hank",
+                    LastName = "Customer",
+                    Email = "customer5@gmail.com",
+                    Username = "customer5",
+                    PasswordHash = "Ov4LxpWKXXV9dwMYvBgqODdzIt0=", // Test123
+                    PasswordSalt = "KtWF6g7SemBqs4nVWV4Ziw==",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc),
+                    LastLoginAt = (DateTime?)null,
+                    PhoneNumber = (string?)null
                 }
             );
         }
@@ -802,6 +844,27 @@ namespace eCommerce.Services.Database
                 {
                     Id = 5,
                     UserId = 5,
+                    RoleId = 2,
+                    DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc)
+                },
+                 new
+                 {
+                     Id = 6,
+                     UserId = 6,
+                     RoleId = 2,
+                     DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc)
+                 },
+                new
+                {
+                    Id = 7,
+                    UserId = 7,
+                    RoleId = 2,
+                    DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc)
+                },
+                new
+                {
+                    Id = 8,
+                    UserId = 8,
                     RoleId = 2,
                     DateAssigned = new DateTime(2026, 3, 9, 0, 0, 0, DateTimeKind.Utc)
                 }

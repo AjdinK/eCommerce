@@ -56,6 +56,11 @@ TypeAdapterConfig<Order, OrderResponse>.NewConfig()
     .Map(dest => dest.Status, src => (int)src.Status);
 TypeAdapterConfig<OrderItem, OrderItemResponse>.NewConfig()
     .Map(dest => dest.ProductName, src => src.Product != null ? src.Product.Name : string.Empty);
+TypeAdapterConfig<ProductRecommendation, ProductRecommendationResponse>.NewConfig()
+    .IgnoreNullValues(true)
+    .Map(dest => dest.Product, src => src.Product)
+    .Map(dest => dest.RecommendedProduct, src => src.RecommendedProduct);
+
 
 
 // register application services
@@ -78,6 +83,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IAssetService, AssetService>();
 
+builder.Services.AddScoped<IProductRecommendationService, ProductRecommendationService>();
 
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 

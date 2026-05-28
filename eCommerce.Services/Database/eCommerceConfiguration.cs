@@ -57,6 +57,18 @@ namespace eCommerce.Services.Database
                .HasForeignKey(o => o.CuponId)
                .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<ProductRecommendation>()
+              .HasOne(pr => pr.Product)
+              .WithMany()
+              .HasForeignKey(pr => pr.ProductId)
+              .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductRecommendation>()
+                .HasOne(pr => pr.RecommendedProduct)
+                .WithMany()
+                .HasForeignKey(pr => pr.RecommendedProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             // Add any additional model configurations here
         }
     }

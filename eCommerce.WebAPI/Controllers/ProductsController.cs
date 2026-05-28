@@ -79,4 +79,19 @@ public class ProductsController : BaseCRUDController<ProductResponse, ProductSea
         return Ok(result);
     }
 
+
+    [HttpPost("dummy-orders")]
+    public virtual async Task<IActionResult> CreateDummyOrders()
+    {
+        var result = await _service.CreateDummyOrdersAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/recommend")]
+    public virtual IActionResult Recommend(int id)
+    {
+        var result = _service.Recommend(id);
+        return Ok(result);
+    }
+
 }

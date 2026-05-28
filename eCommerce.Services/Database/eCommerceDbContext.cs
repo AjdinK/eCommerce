@@ -24,6 +24,7 @@ namespace eCommerce.Services.Database
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Cupon> Cupons { get; set; }
+        public DbSet<ProductRecommendation> ProductRecommendations { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

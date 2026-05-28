@@ -42,7 +42,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDefaults.padding),
-          child: BuyNowRow(onBuyButtonTap: () {}, onCartButtonTap: () => _cartProvider.addToCart(widget.product, quantity: _quantity)),
+          child: BuyNowRow(onBuyButtonTap: () {}, onCartButtonTap: () {
+             ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Product successfully added to cart'),
+                ),
+              );
+              _cartProvider.addToCart(widget.product, quantity: _quantity);
+          }),
         ),
       ),
       body: SingleChildScrollView(

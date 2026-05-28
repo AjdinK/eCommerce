@@ -67,11 +67,6 @@ class SettingsPage extends StatelessWidget {
               onTap: () {},
             ),
             AppSettingsListTile(
-              label: 'Profile Setting',
-              trailing: SvgPicture.asset(AppIcons.right),
-              onTap: () => Navigator.pushNamed(context, AppRoutes.profileEdit),
-            ),
-            AppSettingsListTile(
               label: 'Deactivate Account',
               trailing: SvgPicture.asset(AppIcons.right),
               onTap: () => Navigator.pushNamed(context, AppRoutes.introLogin),

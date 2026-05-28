@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../models/user.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../providers/user_provider.dart';
+import '../../../utils/utils_widgets.dart';
 import 'profile_list_tile.dart';
 
 class ProfileMenuOptions extends StatefulWidget {
@@ -14,6 +17,37 @@ class ProfileMenuOptions extends StatefulWidget {
 }
 
 class _ProfileMenuOptionsState extends State<ProfileMenuOptions> {
+ late UserProvider _userProvider;
+
+  late User user;
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _userProvider = context.read<UserProvider>();
+
+    initUser();
+  }
+
+  Future<void> initUser() async {
+    try {
+      var result = await _userProvider.getById(
+        int.tryParse(AuthProvider.accessTokenDecoded?['Id'] ?? '0') ?? 0,
+      );
+
+      setState(() {
+        user = result;
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      alertBox(context, 'Error', e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,10 +60,16 @@ class _ProfileMenuOptionsState extends State<ProfileMenuOptions> {
       ),
       child: Column(
         children: [
-          ProfileListTile(
+          isLoading ? const CircularProgressIndicator() : ProfileListTile(
             title: 'My Profile',
             icon: AppIcons.profilePerson,
-            onTap: () => Navigator.pushNamed(context, AppRoutes.profileEdit),
+            onTap: () async { 
+              var refresh = await Navigator.pushNamed(context, AppRoutes.profileEdit, arguments: user);
+
+              if(refresh == 'reload') {
+                  initUser();
+              }
+            },
           ),
           const Divider(thickness: 0.1),
           ProfileListTile(
