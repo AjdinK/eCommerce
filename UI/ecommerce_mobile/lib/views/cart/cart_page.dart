@@ -8,6 +8,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 import '../../core/constants/app_defaults.dart';
 import '../../core/routes/app_routes.dart';
+import '../../models/cupon.dart';
+import '../../models/discount_type_enum.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/order_provider.dart';
@@ -28,10 +30,21 @@ class _CartPageState extends State<CartPage> {
   late CartProvider _cartProvider;
   bool _checkoutBusy = false;
 
+  Cupon? _cupon;
+
   @override
   void initState() {
     super.initState();
     _cartProvider = context.read<CartProvider>();
+  }
+
+  double _discount(Cupon? cupon, CartProvider cart) {
+    if (cupon == null) {
+      return 0;
+    }
+    return cupon.discountType == DiscountType.percentage
+        ? _subtotal(cart) * (cupon.discountAmount / 100)
+        : cupon.discountAmount;
   }
 
   double _subtotal(CartProvider cart) {
@@ -41,11 +54,8 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-   int _totalItems(CartProvider cart) {
-    return cart.cart.items.fold<int>(
-      0,
-      (sum, item) => sum + item.quantity,
-    );
+  int _totalItems(CartProvider cart) {
+    return cart.cart.items.fold<int>(0, (sum, item) => sum + item.quantity);
   }
 
   Future<void> _checkout() async {
@@ -94,15 +104,20 @@ class _CartPageState extends State<CartPage> {
       final paymentIntentId = intentData['clientSecret']!
           .split('_secret_')
           .first;
-      await orderProvider.checkout(
+      var order = await orderProvider.checkout(
         payload,
         paymentIntentId: paymentIntentId,
+        cuponId: _cupon?.id,
       );
 
       _cartProvider.clearCart();
 
       if (!mounted) return;
-      await Navigator.pushNamed(context, AppRoutes.orderSuccessfull);
+      await Navigator.pushNamed(
+        context,
+        AppRoutes.orderDetails,
+        arguments: order,
+      );
     } on StripeException catch (e) {
       if (mounted) {
         print(e);
@@ -139,7 +154,13 @@ class _CartPageState extends State<CartPage> {
                   children: [
                     for (final item in cartItems)
                       SingleCartItemTile(cartItem: item),
-                    const CouponCodeField(),
+                    CouponCodeField(
+                      onCuponChanged: (cupon) {
+                        setState(() {
+                          _cupon = cupon;
+                        });
+                      },
+                    ),
                     _itemTotalsAndPrice(cartProvider),
                     SizedBox(
                       width: double.infinity,
@@ -164,10 +185,16 @@ class _CartPageState extends State<CartPage> {
       child: Column(
         children: [
           ItemRow(title: 'Total Item', value: '${_totalItems(cartProvider)}'),
-          ItemRow(title: 'Price', value: '\$ ${_subtotal(cartProvider).toStringAsFixed(2)}'),
-          ItemRow(title: 'Discount', value: '\$ 0.00'),
+          ItemRow(
+            title: 'Price',
+            value: '\$ ${_subtotal(cartProvider).toStringAsFixed(2)}',
+          ),
+          ItemRow(title: 'Discount', value: '\$ ${_discount(_cupon, cartProvider).toStringAsFixed(2)}'),
           DottedDivider(),
-          ItemRow(title: 'Total Price', value: '\$ ${_subtotal(cartProvider).toStringAsFixed(2)}'),
+          ItemRow(
+            title: 'Total Price',
+            value: '\$ ${(_subtotal(cartProvider) - _discount(_cupon, cartProvider)).toStringAsFixed(2)}',
+          ),
         ],
       ),
     );

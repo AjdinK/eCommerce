@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../models/cupon.dart';
+import '../../../providers/cupon_provider.dart';
+import '../../../utils/utils_widgets.dart';
 
 class CouponCodeField extends StatefulWidget {
-  const CouponCodeField({super.key});
+  final ValueChanged<Cupon?>? onCuponChanged;
+
+  const CouponCodeField({super.key, this.onCuponChanged});
 
   @override
   State<CouponCodeField> createState() => _CouponCodeFieldState();
 }
 
 class _CouponCodeFieldState extends State<CouponCodeField> {
+  late CuponProvider _cuponProvider;
   late TextEditingController controller;
 
   bool isFilled = false;
+
+  Cupon? cupon;
 
   onChange(String? text) {
     if (text != null && text.isNotEmpty) {
@@ -28,6 +37,7 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
   void initState() {
     super.initState();
     controller = TextEditingController();
+    _cuponProvider = context.read<CuponProvider>();
   }
 
   @override
@@ -71,7 +81,17 @@ class _CouponCodeFieldState extends State<CouponCodeField> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      var result = await _cuponProvider.getByCode(
+                        controller.text,
+                      );
+                      cupon = result;
+                      widget.onCuponChanged?.call(cupon);
+                    } on Exception catch (e) {
+                      alertBox(context, "Error", e.toString());
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: isFilled ? null : AppColors.placeholder,
                     backgroundColor: isFilled

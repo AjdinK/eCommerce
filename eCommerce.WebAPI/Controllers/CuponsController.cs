@@ -20,4 +20,13 @@ public class CuponsController : BaseCRUDController<CuponResponse, CuponSearch, C
         await _service.ToggleActivityAsync(id);
         return Ok();
     }
+
+    [HttpGet("GetByCode")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CuponResponse>> GetByCode([FromQuery] string code)
+    {
+        var result = await _service.GetByCodeAsync(code);
+        return Ok(result);
+    }
 }

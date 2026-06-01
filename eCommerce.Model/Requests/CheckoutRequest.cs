@@ -4,6 +4,7 @@ public class CheckoutRequest
 {
     public List<CheckoutLineRequest> Items { get; set; } = new();
 
+    public int? CuponId { get; set; }
     public string? ShippingAddress { get; set; }
     public string? ShippingCity { get; set; }
     public string? ShippingState { get; set; }

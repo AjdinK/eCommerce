@@ -7,5 +7,6 @@ namespace eCommerce.Services
     public interface ICuponService : IBaseCRUDService<CuponResponse, CuponSearch, CuponInsertRequest, CuponUpdateRequest>
     {
         Task ToggleActivityAsync(int id);
+        Task<CuponResponse> GetByCodeAsync(string code);
     }
 }

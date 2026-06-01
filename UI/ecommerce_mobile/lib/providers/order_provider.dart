@@ -13,12 +13,14 @@ class OrderProvider extends BaseProvider<Order> {
   Future<Order> checkout(
     List<Map<String, dynamic>> items, {
     String? paymentIntentId,
+    int? cuponId
   }) async {
     final uri = Uri.parse('${BaseProvider.baseUrl}Orders/Checkout');
     final headers = createHeaders();
     final body = jsonEncode({
       'items': items,
       'paymentIntentId': paymentIntentId,
+      'cuponId': cuponId
     });
     final response = await http.post(uri, headers: headers, body: body);
     validateResponse(response);

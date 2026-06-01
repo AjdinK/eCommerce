@@ -1,3 +1,4 @@
+using eCommerce.Model.Enums;
 using eCommerce.Model.Exceptions;
 using eCommerce.Model.Requests;
 using eCommerce.Model.Responses;
@@ -145,6 +146,30 @@ public class OrderService : BaseReadService<Order, OrderResponse, OrderSearchObj
                     UnitPrice = unitPrice,
                 });
             }
+
+            if( request.CuponId != null)
+            {
+                var cupon = await _dbContext.Cupons.FindAsync(request.CuponId.Value);
+
+                if (cupon == null)
+                {
+                    throw new ClinetException($"Cupon {request.CuponId.Value} was not found.");
+                }
+                if (!cupon.IsActive || cupon.ExpiresAt < DateTime.UtcNow)
+                {
+                    throw new ClinetException($"Cupon '{cupon.Code}' is not valid.");
+                }
+
+                var discountAmount = (decimal)cupon.DiscountAmount;
+
+                var discount = cupon.DiscountType == DiscountType.Percentage
+                    ? total * (discountAmount / 100m) :
+                    discountAmount;
+
+                total -= discount;
+                order.CuponId = cupon.Id;
+            }
+
 
             order.TotalAmount = total;
             _dbContext.Orders.Add(order);

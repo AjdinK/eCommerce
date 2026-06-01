@@ -2,8 +2,10 @@ import 'package:ecommerce_mobile/layouts/container_screen.dart';
 import 'package:ecommerce_mobile/providers/auth_provider.dart';
 import 'package:ecommerce_mobile/providers/cart_provider.dart';
 import 'package:ecommerce_mobile/providers/category_provider.dart';
+import 'package:ecommerce_mobile/providers/cupon_provider.dart';
 import 'package:ecommerce_mobile/providers/order_provider.dart';
 import 'package:ecommerce_mobile/providers/product_provider.dart';
+import 'package:ecommerce_mobile/providers/product_recommendation_provider.dart';
 import 'package:ecommerce_mobile/providers/product_review_provider.dart';
 import 'package:ecommerce_mobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +19,19 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=> AuthProvider()),
-        ChangeNotifierProvider(create: (_)=> ProductProvider()),
-        ChangeNotifierProvider(create: (_)=> CartProvider()),
-        ChangeNotifierProvider(create: (_)=> CategoryProvider()),
-        ChangeNotifierProvider(create: (_)=> UserProvider()),
-        ChangeNotifierProvider(create: (_)=> OrderProvider()),
-        ChangeNotifierProvider(create: (_)=> ProductReviewProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => ProductReviewProvider()),
+        ChangeNotifierProvider(create: (_) => CuponProvider()),
+        ChangeNotifierProvider(create: (_) => ProductRecommendationProvider()),
       ],
-      child: const MyApp()));
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -80,7 +86,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,25 +176,38 @@ class LoginPage extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: InkWell(onTap: () async {
+                child: InkWell(
+                  onTap: () async {
                     try {
-                        AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-                        await authProvider.login(_usernameController.text, _passwordController.text);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ContainerScreen()));
-                      } on Exception catch (e) {
-                        alertBox(context, "Error", e.toString());
-                      }
-                },
-                child: Center(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      AuthProvider authProvider = Provider.of<AuthProvider>(
+                        context,
+                        listen: false,
+                      );
+                      await authProvider.login(
+                        _usernameController.text,
+                        _passwordController.text,
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContainerScreen(),
+                        ),
+                      );
+                    } on Exception catch (e) {
+                      alertBox(context, "Error", e.toString());
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),),
+                ),
               ),
             ),
           ],
@@ -199,22 +218,22 @@ class LoginPage extends StatelessWidget {
 }
 
 void alertBox(BuildContext context, String title, String content) {
-     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-  }
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("OK"),
+        ),
+      ],
+    ),
+  );
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
